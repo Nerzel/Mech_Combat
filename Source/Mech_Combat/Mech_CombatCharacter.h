@@ -33,6 +33,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	bool IsAttacking;
 
+private:
+	bool PlayAttackAnimation;
+	FTimerHandle AttackAnimationTimer;
+
 protected:
 
 	/** Resets HMD orientation in VR. */

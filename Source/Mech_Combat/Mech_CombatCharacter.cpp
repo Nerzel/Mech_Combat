@@ -47,6 +47,7 @@ AMech_CombatCharacter::AMech_CombatCharacter()
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 
 	IsAttacking = false;
+	PlayAttackAnimation = false;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -59,7 +60,7 @@ void AMech_CombatCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("DefaultAttack", IE_Pressed, this, &AMech_CombatCharacter::Attack);
-	PlayerInputComponent->BindAction("DefaultAttack", IE_Released, this, &AMech_CombatCharacter::ResetAttack);
+	PlayerInputComponent->BindAction("DefaultAttack", IE_Released, this, &AMech_CombatCharacter::StopAttack);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMech_CombatCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMech_CombatCharacter::MoveRight);
@@ -139,13 +140,17 @@ void AMech_CombatCharacter::MoveRight(float Value)
 
 void AMech_CombatCharacter::Attack() {
 	IsAttacking = true;
+	PlayAttackAnimation = true;
+	GetWorldTimerManager().SetTimer(AttackAnimationTimer, this, &AMech_CombatCharacter::ResetAttack, 0.56f, true);
 }
 
 void AMech_CombatCharacter::StopAttack() {
-	FTimerHandle UnusedHandle;
-	GetWorldTimerManager().SetTimer(UnusedHandle, this, &AMech_CombatCharacter::ResetAttack, 0.56f, false);
+	PlayAttackAnimation = false;
 }
 
 void AMech_CombatCharacter::ResetAttack() {
-	IsAttacking = false;
+	if (!PlayAttackAnimation) {
+		IsAttacking = false;
+		GetWorldTimerManager().ClearTimer(AttackAnimationTimer);
+	}
 }
