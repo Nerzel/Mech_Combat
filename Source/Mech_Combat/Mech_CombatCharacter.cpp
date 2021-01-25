@@ -45,6 +45,8 @@ AMech_CombatCharacter::AMech_CombatCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
+	IsAttacking = false;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -56,6 +58,8 @@ void AMech_CombatCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("DefaultAttack", IE_Pressed, this, &AMech_CombatCharacter::Attack);
+	PlayerInputComponent->BindAction("DefaultAttack", IE_Released, this, &AMech_CombatCharacter::ResetAttack);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMech_CombatCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMech_CombatCharacter::MoveRight);
@@ -131,4 +135,17 @@ void AMech_CombatCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+void AMech_CombatCharacter::Attack() {
+	IsAttacking = true;
+}
+
+void AMech_CombatCharacter::StopAttack() {
+	FTimerHandle UnusedHandle;
+	GetWorldTimerManager().SetTimer(UnusedHandle, this, &AMech_CombatCharacter::ResetAttack, 0.56f, false);
+}
+
+void AMech_CombatCharacter::ResetAttack() {
+	IsAttacking = false;
 }

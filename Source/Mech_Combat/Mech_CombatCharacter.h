@@ -29,6 +29,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
+	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	bool IsAttacking;
+
 protected:
 
 	/** Resets HMD orientation in VR. */
@@ -57,6 +61,15 @@ protected:
 
 	/** Handler for when a touch input stops. */
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
+
+	/** Called when attack button is triggered down */
+	void Attack();
+
+	/** Called when attack button is released */
+	void StopAttack();
+
+	/** Called when attack button is done to stop the animation */
+	void ResetAttack();
 
 protected:
 	// APawn interface
