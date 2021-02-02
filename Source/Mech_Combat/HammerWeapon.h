@@ -7,20 +7,24 @@
 #include "HammerWeapon.generated.h"
 
 UCLASS()
-class MECH_COMBAT_API AHammerWeapon : public AActor
-{
+class MECH_COMBAT_API AHammerWeapon : public AActor {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AHammerWeapon();
+
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
+	USkeletalMeshComponent* Mesh;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	FORCEINLINE class USkeletalMeshComponent* GetMesh() const { return Mesh; }
 
 };

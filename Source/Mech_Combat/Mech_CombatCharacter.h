@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "HammerWeapon.h"
 #include "GameFramework/Character.h"
 #include "Mech_CombatCharacter.generated.h"
 
@@ -32,6 +33,9 @@ public:
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	bool IsAttacking;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Weapon")
+	TSubclassOf<AHammerWeapon> HammerWeaponBP;
 
 private:
 	bool PlayAttackAnimation;
@@ -85,5 +89,6 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	virtual void BeginPlay() override;
 };
 

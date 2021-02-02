@@ -1,6 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "Mech_CombatCharacter.h"
+
+#include "HammerWeapon.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -153,4 +155,13 @@ void AMech_CombatCharacter::ResetAttack() {
 		IsAttacking = false;
 		GetWorldTimerManager().ClearTimer(AttackAnimationTimer);
 	}
+}
+
+void AMech_CombatCharacter::BeginPlay() {
+	FTransform HammerSocketTransform;
+
+	Super::BeginPlay();
+
+	HammerSocketTransform = GetMesh()->GetSocketTransform(FName(TEXT("HammerSocket")), RTS_World);
+	GetWorld()->SpawnActor<AHammerWeapon>(this->HammerWeaponBP, HammerSocketTransform);
 }
