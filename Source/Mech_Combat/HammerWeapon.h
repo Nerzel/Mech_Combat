@@ -11,8 +11,8 @@ class MECH_COMBAT_API AHammerWeapon : public AActor {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
-	AHammerWeapon();
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float BaseDamage;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
@@ -23,6 +23,8 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	// Sets default values for this actor's properties
+	AHammerWeapon();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	FORCEINLINE class USkeletalMeshComponent* GetMesh() const { return Mesh; }

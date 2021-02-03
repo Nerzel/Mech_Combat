@@ -9,6 +9,8 @@ AHammerWeapon::AHammerWeapon() {
 	PrimaryActorTick.bCanEverTick = true;
 	this->Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
 	this->Mesh->AttachToComponent(this->RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	this->Mesh->SetGenerateOverlapEvents(true);
+	this->BaseDamage = 0.4f;
 }
 
 // Called when the game starts or when spawned
