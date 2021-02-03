@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Engine/EngineTypes.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -159,9 +160,20 @@ void AMech_CombatCharacter::ResetAttack() {
 
 void AMech_CombatCharacter::BeginPlay() {
 	FTransform HammerSocketTransform;
+	USkeletalMeshComponent* CharacterMesh;
 
 	Super::BeginPlay();
 
-	HammerSocketTransform = GetMesh()->GetSocketTransform(FName(TEXT("HammerSocket")), RTS_World);
-	GetWorld()->SpawnActor<AHammerWeapon>(this->HammerWeaponBP, HammerSocketTransform);
+	CharacterMesh = GetMesh();
+	HammerSocketTransform = CharacterMesh->GetSocketTransform(FName(TEXT("HammerSocket")), RTS_World);
+	GetWorld()->SpawnActor<AHammerWeapon>(this->HammerWeaponBP, HammerSocketTransform)->AttachToComponent(
+		CharacterMesh,
+		FAttachmentTransformRules(
+			EAttachmentRule::SnapToTarget,
+			EAttachmentRule::SnapToTarget,
+			EAttachmentRule::SnapToTarget,
+			true
+		),
+		FName(TEXT("HammerSocket"))
+	);
 }
