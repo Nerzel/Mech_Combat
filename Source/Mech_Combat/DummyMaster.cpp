@@ -24,7 +24,7 @@ void ADummyMaster::NotifyActorEndOverlap(AActor* OtherActor) {
 
 	if (OtherActor && OtherActor->IsA<AHammerWeapon>()) {
 		Character = Cast<AMech_CombatCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
-		if (Character->IsAttacking) {
+		if (Character->bIsAttacking) {
 			this->Health -= Cast<AHammerWeapon>(OtherActor)->BaseDamage;
 			if (this->Health <= 0) {
 				Destroy();

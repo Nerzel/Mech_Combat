@@ -50,9 +50,11 @@ AMech_CombatCharacter::AMech_CombatCharacter()
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 
-	this->IsAttacking = false;
+	this->bIsAttacking = false;
+	this->bIsSprinting = false;
 	this->PlayAttackAnimation = false;
 	this->Health = 1.0f;
+	this->Energy = 1.0f;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -66,6 +68,8 @@ void AMech_CombatCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("DefaultAttack", IE_Pressed, this, &AMech_CombatCharacter::Attack);
 	PlayerInputComponent->BindAction("DefaultAttack", IE_Released, this, &AMech_CombatCharacter::StopAttack);
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AMech_CombatCharacter::StartSprinting);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &AMech_CombatCharacter::StopSprinting);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMech_CombatCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMech_CombatCharacter::MoveRight);
@@ -144,7 +148,7 @@ void AMech_CombatCharacter::MoveRight(float Value)
 }
 
 void AMech_CombatCharacter::Attack() {
-	IsAttacking = true;
+	bIsAttacking = true;
 	PlayAttackAnimation = true;
 	GetWorldTimerManager().SetTimer(AttackAnimationTimer, this, &AMech_CombatCharacter::ResetAttack, 0.56f, true);
 }
@@ -155,7 +159,7 @@ void AMech_CombatCharacter::StopAttack() {
 
 void AMech_CombatCharacter::ResetAttack() {
 	if (!PlayAttackAnimation) {
-		IsAttacking = false;
+		bIsAttacking = false;
 		GetWorldTimerManager().ClearTimer(AttackAnimationTimer);
 	}
 }
@@ -188,4 +192,28 @@ void AMech_CombatCharacter::BeginPlay() {
 UDefaultCharacterHUDWidget* AMech_CombatCharacter::GetCharacterHUDWidget() {
 	return this->CharacterHUDWidget;
 }
+
+void AMech_CombatCharacter::StartSprinting() {
+	if (this->Energy > 0.0f) {
+		this->bIsSprinting = true;
+		GetCharacterMovement()->MaxWalkSpeed *= 2.0f;
+		GetWorldTimerManager().SetTimer(EnergyDecreaseTimer, this, &AMech_CombatCharacter::DecreaseEnergyWhileSprinting, 1.0f, true);
+	}
+}
+
+void AMech_CombatCharacter::StopSprinting() {
+	if (this->bIsSprinting) {
+		this->bIsSprinting = false;
+		GetCharacterMovement()->MaxWalkSpeed /= 2.0f;
+		GetWorldTimerManager().ClearTimer(EnergyDecreaseTimer);
+	}
+}
+
+void AMech_CombatCharacter::DecreaseEnergyWhileSprinting() {
+	this->Energy -= 0.1f;
+	if (this->Energy <= 0.0f) {
+		StopSprinting();
+	}
+}
+
 

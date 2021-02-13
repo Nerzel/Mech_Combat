@@ -19,4 +19,8 @@ void UDefaultCharacterHUDWidget::NativeTick(const FGeometry& MyGeometry, float I
     if (this->HealthBar) {
         this->HealthBar->SetPercent(Character->Health);
     }
+
+    if (this->EnergyBar) {
+        this->EnergyBar->SetPercent(Character->Energy);
+    }
 }

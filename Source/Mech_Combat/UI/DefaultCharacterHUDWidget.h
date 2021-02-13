@@ -19,5 +19,7 @@ public:
     virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
     UProgressBar* HealthBar;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UProgressBar* EnergyBar;
 
 };

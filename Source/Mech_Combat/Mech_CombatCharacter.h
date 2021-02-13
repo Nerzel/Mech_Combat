@@ -32,12 +32,19 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
-	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
+	/** Boolean to evaluate the attack state */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
-	bool IsAttacking;
+	bool bIsAttacking;
+
+	/** Boolean to evaluate the sprinting state */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	bool bIsSprinting;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	float Health;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	float Energy;
 
 	UPROPERTY(EditDefaultsOnly, Category=HUD)
 	TSubclassOf<UDefaultCharacterHUDWidget> DefaultCharacterHUDClass;
@@ -48,6 +55,7 @@ public:
 private:
 	bool PlayAttackAnimation;
 	FTimerHandle AttackAnimationTimer;
+	FTimerHandle EnergyDecreaseTimer;
 	UDefaultCharacterHUDWidget* CharacterHUDWidget;
 
 protected:
@@ -87,6 +95,16 @@ protected:
 
 	/** Called when attack button is done to stop the animation */
 	void ResetAttack();
+
+	/** Called when srpint button is triggered down */
+	void StartSprinting();
+
+	/** Called when srpint button is released to get back to normal speed*/
+	void StopSprinting();
+
+	/** Called by timer handler to decrease energy while sprinting*/
+	void DecreaseEnergyWhileSprinting();
+
 
 protected:
 	// APawn interface
