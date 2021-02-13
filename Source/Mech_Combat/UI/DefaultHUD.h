@@ -11,8 +11,6 @@ class MECH_COMBAT_API ADefaultHUD : public AHUD {
 public:
     ADefaultHUD();
     virtual void BeginPlay() override;
-    UFUNCTION()
-    void UdpateHealthBar(float HealthValue);
     UPROPERTY(EditDefaultsOnly, Category=Widgets)
     TSubclassOf<UHealthBarWidget> HealthBarWidgetClass;
 

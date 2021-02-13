@@ -34,6 +34,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	bool IsAttacking;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	float Health;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Weapon)
 	TSubclassOf<AHammerWeapon> HammerWeaponBP;
 
