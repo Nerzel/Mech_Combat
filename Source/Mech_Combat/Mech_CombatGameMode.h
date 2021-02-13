@@ -7,8 +7,7 @@
 #include "Mech_CombatGameMode.generated.h"
 
 UCLASS(minimalapi)
-class AMech_CombatGameMode : public AGameModeBase
-{
+class AMech_CombatGameMode : public AGameModeBase {
 	GENERATED_BODY()
 
 public:

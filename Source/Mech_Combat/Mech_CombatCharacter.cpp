@@ -4,6 +4,7 @@
 
 #include "HammerWeapon.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
+#include "Blueprint/UserWidget.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
@@ -165,6 +166,11 @@ void AMech_CombatCharacter::BeginPlay() {
 
 	Super::BeginPlay();
 
+	if (this->DefaultCharacterHUDClass) {
+		this->CharacterHUDWidget = CreateWidget<UDefaultCharacterHUDWidget>(GetWorld(), DefaultCharacterHUDClass, FName(TEXT("DefaultCharacterHUD")));
+		this->CharacterHUDWidget->AddToViewport();
+	}
+
 	CharacterMesh = GetMesh();
 	HammerSocketTransform = CharacterMesh->GetSocketTransform(FName(TEXT("HammerSocket")), RTS_World);
 	GetWorld()->SpawnActor<AHammerWeapon>(this->HammerWeaponBP, HammerSocketTransform)->AttachToComponent(
@@ -178,3 +184,8 @@ void AMech_CombatCharacter::BeginPlay() {
 		FName(TEXT("HammerSocket"))
 	);
 }
+
+UDefaultCharacterHUDWidget* AMech_CombatCharacter::GetCharacterHUDWidget() {
+	return this->CharacterHUDWidget;
+}
+

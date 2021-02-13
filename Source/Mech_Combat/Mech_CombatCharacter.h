@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "HammerWeapon.h"
 #include "GameFramework/Character.h"
+#include "UI/DefaultCharacterHUDWidget.h"
+
 #include "Mech_CombatCharacter.generated.h"
 
 UCLASS(config=Game)
@@ -37,12 +39,16 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	float Health;
 
+	UPROPERTY(EditDefaultsOnly, Category=HUD)
+	TSubclassOf<UDefaultCharacterHUDWidget> DefaultCharacterHUDClass;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Weapon)
 	TSubclassOf<AHammerWeapon> HammerWeaponBP;
 
 private:
 	bool PlayAttackAnimation;
 	FTimerHandle AttackAnimationTimer;
+	UDefaultCharacterHUDWidget* CharacterHUDWidget;
 
 protected:
 
@@ -93,5 +99,7 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 	virtual void BeginPlay() override;
+	UDefaultCharacterHUDWidget* GetCharacterHUDWidget();
+
 };
 

@@ -10,9 +10,5 @@ AMech_CombatGameMode::AMech_CombatGameMode() {
 	if (PlayerPawnBPClass.Class != NULL) {
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
-	static ConstructorHelpers::FClassFinder<AActor> HUDClassBP(TEXT("/Game/MechCombat/Blueprints/UI/DefaultHUD_BP"));
-	if (HUDClassBP.Class != NULL) {
-		HUDClass = HUDClassBP.Class;
-	}
 
 }
