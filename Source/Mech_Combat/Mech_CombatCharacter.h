@@ -44,7 +44,10 @@ public:
 	float Health;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
-	float Energy;
+	float Stamina;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	int AttackEnergy;
 
 	UPROPERTY(EditDefaultsOnly, Category=HUD)
 	TSubclassOf<UDefaultCharacterHUDWidget> DefaultCharacterHUDClass;
@@ -103,7 +106,7 @@ protected:
 	void StopSprinting();
 
 	/** Called by timer handler to decrease energy while sprinting*/
-	void DecreaseEnergyWhileSprinting();
+	void DecreaseStaminaWhileSprinting();
 
 
 protected:

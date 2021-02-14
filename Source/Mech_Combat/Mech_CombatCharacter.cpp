@@ -54,7 +54,8 @@ AMech_CombatCharacter::AMech_CombatCharacter()
 	this->bIsSprinting = false;
 	this->PlayAttackAnimation = false;
 	this->Health = 1.0f;
-	this->Energy = 1.0f;
+	this->Stamina = 1.0f;
+	this->AttackEnergy = 12;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -194,10 +195,10 @@ UDefaultCharacterHUDWidget* AMech_CombatCharacter::GetCharacterHUDWidget() {
 }
 
 void AMech_CombatCharacter::StartSprinting() {
-	if (this->Energy > 0.0f) {
+	if (this->Stamina > 0.0f) {
 		this->bIsSprinting = true;
 		GetCharacterMovement()->MaxWalkSpeed *= 2.0f;
-		GetWorldTimerManager().SetTimer(EnergyDecreaseTimer, this, &AMech_CombatCharacter::DecreaseEnergyWhileSprinting, 1.0f, true);
+		GetWorldTimerManager().SetTimer(EnergyDecreaseTimer, this, &AMech_CombatCharacter::DecreaseStaminaWhileSprinting, 1.0f, true);
 	}
 }
 
@@ -209,9 +210,9 @@ void AMech_CombatCharacter::StopSprinting() {
 	}
 }
 
-void AMech_CombatCharacter::DecreaseEnergyWhileSprinting() {
-	this->Energy -= 0.1f;
-	if (this->Energy <= 0.0f) {
+void AMech_CombatCharacter::DecreaseStaminaWhileSprinting() {
+	this->Stamina -= 0.1f;
+	if (this->Stamina <= 0.0f) {
 		StopSprinting();
 	}
 }

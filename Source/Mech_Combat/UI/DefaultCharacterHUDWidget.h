@@ -20,6 +20,8 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
     UProgressBar* HealthBar;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-    UProgressBar* EnergyBar;
+    UProgressBar* StaminaBar;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UProgressBar* AttackEnergyBar;
 
 };
