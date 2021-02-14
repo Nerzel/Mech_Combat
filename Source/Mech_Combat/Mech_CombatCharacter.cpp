@@ -200,6 +200,9 @@ void AMech_CombatCharacter::StartSprinting() {
 		GetCharacterMovement()->MaxWalkSpeed *= 2.0f;
 		GetWorldTimerManager().SetTimer(EnergyDecreaseTimer, this, &AMech_CombatCharacter::DecreaseStaminaWhileSprinting, 1.0f, true);
 	}
+	if (EnergyIncreaseTimer.IsValid()) {
+		GetWorldTimerManager().ClearTimer(EnergyIncreaseTimer);
+	}
 }
 
 void AMech_CombatCharacter::StopSprinting() {
@@ -208,12 +211,23 @@ void AMech_CombatCharacter::StopSprinting() {
 		GetCharacterMovement()->MaxWalkSpeed /= 2.0f;
 		GetWorldTimerManager().ClearTimer(EnergyDecreaseTimer);
 	}
+	if (this->Stamina < 1.0f) {
+		GetWorldTimerManager().SetTimer(EnergyIncreaseTimer, this, &AMech_CombatCharacter::IncreaseStaminaAfterSprinting, 1.0f, true);
+	}
 }
 
 void AMech_CombatCharacter::DecreaseStaminaWhileSprinting() {
 	this->Stamina -= 0.1f;
 	if (this->Stamina <= 0.0f) {
 		StopSprinting();
+	}
+}
+
+void AMech_CombatCharacter::IncreaseStaminaAfterSprinting() {
+	if (this->Stamina < 1.0f) {
+		this->Stamina += 0.05f;
+	} else {
+		GetWorldTimerManager().ClearTimer(EnergyIncreaseTimer);
 	}
 }
 

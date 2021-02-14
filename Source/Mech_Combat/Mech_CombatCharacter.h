@@ -59,6 +59,7 @@ private:
 	bool PlayAttackAnimation;
 	FTimerHandle AttackAnimationTimer;
 	FTimerHandle EnergyDecreaseTimer;
+	FTimerHandle EnergyIncreaseTimer;
 	UDefaultCharacterHUDWidget* CharacterHUDWidget;
 
 protected:
@@ -107,6 +108,9 @@ protected:
 
 	/** Called by timer handler to decrease energy while sprinting*/
 	void DecreaseStaminaWhileSprinting();
+
+	/** Called by timer handler to increase energy after sprinting*/
+	void IncreaseStaminaAfterSprinting();
 
 
 protected:
