@@ -70,7 +70,7 @@ void AMech_CombatCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 	PlayerInputComponent->BindAction("DefaultAttack", IE_Pressed, this, &AMech_CombatCharacter::Attack);
 	PlayerInputComponent->BindAction("DefaultAttack", IE_Released, this, &AMech_CombatCharacter::StopAttack);
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AMech_CombatCharacter::StartSprinting);
-	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &AMech_CombatCharacter::StopSprinting);
+	PlayerInputComponent->BindAction<FStopSprintingDelegate>("Sprint", IE_Released, this, &AMech_CombatCharacter::StopSprinting, true);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMech_CombatCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMech_CombatCharacter::MoveRight);
@@ -205,13 +205,13 @@ void AMech_CombatCharacter::StartSprinting() {
 	}
 }
 
-void AMech_CombatCharacter::StopSprinting() {
+void AMech_CombatCharacter::StopSprinting(const bool bRefillStamina) {
 	if (this->bIsSprinting) {
 		this->bIsSprinting = false;
 		GetCharacterMovement()->MaxWalkSpeed /= 2.0f;
 		GetWorldTimerManager().ClearTimer(EnergyDecreaseTimer);
 	}
-	if (this->Stamina < 1.0f) {
+	if (this->Stamina < 1.0f && bRefillStamina) {
 		GetWorldTimerManager().SetTimer(EnergyIncreaseTimer, this, &AMech_CombatCharacter::IncreaseStaminaAfterSprinting, 1.0f, true);
 	}
 }
@@ -219,7 +219,7 @@ void AMech_CombatCharacter::StopSprinting() {
 void AMech_CombatCharacter::DecreaseStaminaWhileSprinting() {
 	this->Stamina -= 0.1f;
 	if (this->Stamina <= 0.0f) {
-		StopSprinting();
+		StopSprinting(false);
 	}
 }
 

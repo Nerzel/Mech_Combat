@@ -104,7 +104,8 @@ protected:
 	void StartSprinting();
 
 	/** Called when srpint button is released to get back to normal speed*/
-	void StopSprinting();
+	void StopSprinting(const bool bRefillStamina);
+	DECLARE_DELEGATE_OneParam(FStopSprintingDelegate, bool);
 
 	/** Called by timer handler to decrease energy while sprinting*/
 	void DecreaseStaminaWhileSprinting();
