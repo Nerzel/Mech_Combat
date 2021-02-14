@@ -8,11 +8,20 @@
 
 UCLASS(minimalapi)
 class AMech_CombatGameMode : public AGameModeBase {
+
 	GENERATED_BODY()
 
 public:
+	int RemainingMinutes;
+	int RemainingSeconds;
+
+private:
+	FTimerHandle SecondIncreaseTimer;
+
+public:
 	AMech_CombatGameMode();
+	virtual void StartPlay();
+	void IncreaseTimer();
+
 };
-
-
 

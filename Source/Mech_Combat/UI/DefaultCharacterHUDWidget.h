@@ -2,6 +2,9 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
+#include "Mech_Combat/Mech_CombatGameMode.h"
+
 #include "DefaultCharacterHUDWidget.generated.h"
 
 class AMech_CombatCharacter;
@@ -12,6 +15,8 @@ class MECH_COMBAT_API UDefaultCharacterHUDWidget : public UUserWidget {
 
 private:
     AMech_CombatCharacter* Character;
+    AMech_CombatGameMode* GameMode;
+    FNumberFormattingOptions FormatingOptions;
 
 public:
     UDefaultCharacterHUDWidget(const FObjectInitializer& ObjectInitializer);
@@ -23,5 +28,9 @@ public:
     UProgressBar* StaminaBar;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
     UProgressBar* AttackEnergyBar;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UTextBlock* MinuteTextBlock;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UTextBlock* SecondTextBlock;
 
 };
