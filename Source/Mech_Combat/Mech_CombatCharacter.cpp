@@ -54,6 +54,7 @@ AMech_CombatCharacter::AMech_CombatCharacter()
 	this->bIsAlreadyAttacking = false;
 	this->bIsSprinting = false;
 	this->bIsWirlwindActive = false;
+	this->bIsHelicopterActive = false;
 	this->PlayAttackAnimation = false;
 	this->Health = 1.0f;
 	this->Stamina = 1.0f;
@@ -75,6 +76,8 @@ void AMech_CombatCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 	PlayerInputComponent->BindAction<FStopSprintingDelegate>("Sprint", IE_Released, this, &AMech_CombatCharacter::StopSprinting, true);
 	PlayerInputComponent->BindAction("WhirlwindAttack", IE_Pressed, this, &AMech_CombatCharacter::ExecuteWhirlwindAttack);
 	PlayerInputComponent->BindAction("WhirlwindAttack", IE_Released, this, &AMech_CombatCharacter::StopWhirlwindAttack);
+	PlayerInputComponent->BindAction("HelicopterAttack", IE_Pressed, this, &AMech_CombatCharacter::ExecuteHelicopterAttack);
+	PlayerInputComponent->BindAction("HelicopterAttack", IE_Released, this, &AMech_CombatCharacter::StopHelicopterAttack);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMech_CombatCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMech_CombatCharacter::MoveRight);
@@ -248,6 +251,21 @@ void AMech_CombatCharacter::ExecuteWhirlwindAttack() {
 void AMech_CombatCharacter::StopWhirlwindAttack() {
 	if (this->bIsWirlwindActive) {
 		this->bIsWirlwindActive = false;
+		this->bIsAlreadyAttacking = false;
+	}
+}
+
+void AMech_CombatCharacter::ExecuteHelicopterAttack() {
+	if (!this->bIsAlreadyAttacking && this->AttackEnergy >= 2) {
+		this->bIsHelicopterActive = true;
+		this->bIsAlreadyAttacking = true;
+		this->AttackEnergy -= 2;
+	}
+}
+
+void AMech_CombatCharacter::StopHelicopterAttack() {
+	if (this->bIsHelicopterActive) {
+		this->bIsHelicopterActive = false;
 		this->bIsAlreadyAttacking = false;
 	}
 }

@@ -43,9 +43,13 @@ public:
 	/** Boolean to evaluate when an attack animation is already running */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	bool bIsAlreadyAttacking;
-	/** Boolean to say when the whirlwind attacked is lunching */
+	/** Boolean to say when the whirlwind attack is running */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	bool bIsWirlwindActive;
+
+	/** Boolean to say when the helicopter attack is running */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	bool bIsHelicopterActive;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	float Health;
@@ -123,6 +127,10 @@ protected:
 	void ExecuteWhirlwindAttack();
 
 	void StopWhirlwindAttack();
+
+	void ExecuteHelicopterAttack();
+
+	void StopHelicopterAttack();
 
 
 protected:
