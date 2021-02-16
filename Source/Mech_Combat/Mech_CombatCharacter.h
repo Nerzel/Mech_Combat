@@ -40,6 +40,13 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	bool bIsSprinting;
 
+	/** Boolean to evaluate when an attack animation is already running */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	bool bIsAlreadyAttacking;
+	/** Boolean to say when the whirlwind attacked is lunching */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	bool bIsWirlwindActive;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	float Health;
 
@@ -112,6 +119,10 @@ protected:
 
 	/** Called by timer handler to increase energy after sprinting*/
 	void IncreaseStaminaAfterSprinting();
+
+	void ExecuteWhirlwindAttack();
+
+	void StopWhirlwindAttack();
 
 
 protected:

@@ -51,7 +51,9 @@ AMech_CombatCharacter::AMech_CombatCharacter()
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 
 	this->bIsAttacking = false;
+	this->bIsAlreadyAttacking = false;
 	this->bIsSprinting = false;
+	this->bIsWirlwindActive = false;
 	this->PlayAttackAnimation = false;
 	this->Health = 1.0f;
 	this->Stamina = 1.0f;
@@ -71,6 +73,8 @@ void AMech_CombatCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 	PlayerInputComponent->BindAction("DefaultAttack", IE_Released, this, &AMech_CombatCharacter::StopAttack);
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AMech_CombatCharacter::StartSprinting);
 	PlayerInputComponent->BindAction<FStopSprintingDelegate>("Sprint", IE_Released, this, &AMech_CombatCharacter::StopSprinting, true);
+	PlayerInputComponent->BindAction("WhirlwindAttack", IE_Pressed, this, &AMech_CombatCharacter::ExecuteWhirlwindAttack);
+	PlayerInputComponent->BindAction("WhirlwindAttack", IE_Released, this, &AMech_CombatCharacter::StopWhirlwindAttack);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMech_CombatCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMech_CombatCharacter::MoveRight);
@@ -150,6 +154,7 @@ void AMech_CombatCharacter::MoveRight(float Value)
 
 void AMech_CombatCharacter::Attack() {
 	bIsAttacking = true;
+	bIsAlreadyAttacking = true;
 	PlayAttackAnimation = true;
 	GetWorldTimerManager().SetTimer(AttackAnimationTimer, this, &AMech_CombatCharacter::ResetAttack, 0.56f, true);
 }
@@ -161,6 +166,7 @@ void AMech_CombatCharacter::StopAttack() {
 void AMech_CombatCharacter::ResetAttack() {
 	if (!PlayAttackAnimation) {
 		bIsAttacking = false;
+		bIsAlreadyAttacking = false;
 		GetWorldTimerManager().ClearTimer(AttackAnimationTimer);
 	}
 }
@@ -231,4 +237,17 @@ void AMech_CombatCharacter::IncreaseStaminaAfterSprinting() {
 	}
 }
 
+void AMech_CombatCharacter::ExecuteWhirlwindAttack() {
+	if (!this->bIsAlreadyAttacking && this->AttackEnergy >= 3) {
+		this->bIsWirlwindActive = true;
+		this->bIsAlreadyAttacking = true;
+		this->AttackEnergy -= 3;
+	}
+}
 
+void AMech_CombatCharacter::StopWhirlwindAttack() {
+	if (this->bIsWirlwindActive) {
+		this->bIsWirlwindActive = false;
+		this->bIsAlreadyAttacking = false;
+	}
+}
