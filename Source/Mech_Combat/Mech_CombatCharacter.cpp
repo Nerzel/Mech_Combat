@@ -55,6 +55,7 @@ AMech_CombatCharacter::AMech_CombatCharacter()
 	this->bIsSprinting = false;
 	this->bIsWirlwindActive = false;
 	this->bIsHelicopterActive = false;
+	this->bIsLeapctive = false;
 	this->PlayAttackAnimation = false;
 	this->Health = 1.0f;
 	this->Stamina = 1.0f;
@@ -78,6 +79,7 @@ void AMech_CombatCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 	PlayerInputComponent->BindAction("WhirlwindAttack", IE_Released, this, &AMech_CombatCharacter::StopWhirlwindAttack);
 	PlayerInputComponent->BindAction("HelicopterAttack", IE_Pressed, this, &AMech_CombatCharacter::ExecuteHelicopterAttack);
 	PlayerInputComponent->BindAction("HelicopterAttack", IE_Released, this, &AMech_CombatCharacter::StopHelicopterAttack);
+	PlayerInputComponent->BindAction("Leap", IE_Pressed, this, &AMech_CombatCharacter::ExecuteLeap);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMech_CombatCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMech_CombatCharacter::MoveRight);
@@ -268,4 +270,21 @@ void AMech_CombatCharacter::StopHelicopterAttack() {
 		this->bIsHelicopterActive = false;
 		this->bIsAlreadyAttacking = false;
 	}
+}
+
+void AMech_CombatCharacter::ExecuteLeap() {
+	if (!this->bIsAlreadyAttacking && this->AttackEnergy >= 2) {
+		this->bIsLeapctive = true;
+		this->bIsAlreadyAttacking = true;
+		this->AttackEnergy -= 2;
+
+		GetCharacterMovement()->AddImpulse(GetActorForwardVector() * 1000.0f + FVector(0.0f, 0.0f,600.0f), true);
+		GetWorldTimerManager().SetTimer(LeapTimer, this, &AMech_CombatCharacter::StopLeap, 1.0f, false);
+	}
+}
+
+void AMech_CombatCharacter::StopLeap() {
+	GetWorldTimerManager().ClearTimer(LeapTimer);
+	this->bIsLeapctive = false;
+	this->bIsAlreadyAttacking = false;
 }

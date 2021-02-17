@@ -51,6 +51,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	bool bIsHelicopterActive;
 
+	/** Boolean to say when the leap is running */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	bool bIsLeapctive;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	float Health;
 
@@ -71,6 +75,7 @@ private:
 	FTimerHandle AttackAnimationTimer;
 	FTimerHandle EnergyDecreaseTimer;
 	FTimerHandle EnergyIncreaseTimer;
+	FTimerHandle LeapTimer;
 	UDefaultCharacterHUDWidget* CharacterHUDWidget;
 
 protected:
@@ -131,6 +136,10 @@ protected:
 	void ExecuteHelicopterAttack();
 
 	void StopHelicopterAttack();
+
+	void ExecuteLeap();
+
+	void StopLeap();
 
 
 protected:
