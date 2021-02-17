@@ -60,6 +60,7 @@ AMech_CombatCharacter::AMech_CombatCharacter()
 	this->Health = 1.0f;
 	this->Stamina = 1.0f;
 	this->AttackEnergy = 12;
+	this->DamageType = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -161,6 +162,7 @@ void AMech_CombatCharacter::Attack() {
 	bIsAttacking = true;
 	bIsAlreadyAttacking = true;
 	PlayAttackAnimation = true;
+	this->DamageType = 1;
 	GetWorldTimerManager().SetTimer(AttackAnimationTimer, this, &AMech_CombatCharacter::ResetAttack, 0.56f, true);
 }
 
@@ -172,6 +174,7 @@ void AMech_CombatCharacter::ResetAttack() {
 	if (!PlayAttackAnimation) {
 		bIsAttacking = false;
 		bIsAlreadyAttacking = false;
+		this->DamageType = 0;
 		GetWorldTimerManager().ClearTimer(AttackAnimationTimer);
 	}
 }
@@ -246,6 +249,7 @@ void AMech_CombatCharacter::ExecuteWhirlwindAttack() {
 	if (!this->bIsAlreadyAttacking && this->AttackEnergy >= 3) {
 		this->bIsWirlwindActive = true;
 		this->bIsAlreadyAttacking = true;
+		this->DamageType = 2;
 		this->AttackEnergy -= 3;
 	}
 }
@@ -254,6 +258,7 @@ void AMech_CombatCharacter::StopWhirlwindAttack() {
 	if (this->bIsWirlwindActive) {
 		this->bIsWirlwindActive = false;
 		this->bIsAlreadyAttacking = false;
+		this->DamageType = 0;
 	}
 }
 
@@ -261,6 +266,7 @@ void AMech_CombatCharacter::ExecuteHelicopterAttack() {
 	if (!this->bIsAlreadyAttacking && this->AttackEnergy >= 2) {
 		this->bIsHelicopterActive = true;
 		this->bIsAlreadyAttacking = true;
+		this->DamageType = 3;
 		this->AttackEnergy -= 2;
 	}
 }
@@ -269,6 +275,7 @@ void AMech_CombatCharacter::StopHelicopterAttack() {
 	if (this->bIsHelicopterActive) {
 		this->bIsHelicopterActive = false;
 		this->bIsAlreadyAttacking = false;
+		this->DamageType = 0;
 	}
 }
 
@@ -276,6 +283,7 @@ void AMech_CombatCharacter::ExecuteLeap() {
 	if (!this->bIsAlreadyAttacking && this->AttackEnergy >= 2) {
 		this->bIsLeapctive = true;
 		this->bIsAlreadyAttacking = true;
+		this->DamageType = 4;
 		this->AttackEnergy -= 2;
 
 		GetCharacterMovement()->AddImpulse(GetActorForwardVector() * 1000.0f + FVector(0.0f, 0.0f,600.0f), true);
@@ -287,4 +295,5 @@ void AMech_CombatCharacter::StopLeap() {
 	GetWorldTimerManager().ClearTimer(LeapTimer);
 	this->bIsLeapctive = false;
 	this->bIsAlreadyAttacking = false;
+	this->DamageType = 0;
 }

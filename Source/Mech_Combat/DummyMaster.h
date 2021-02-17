@@ -14,6 +14,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float Health;
 
+private:
+	UParticleSystem* ExplosionParticle;
+
 public:
 	ADummyMaster();
 	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;

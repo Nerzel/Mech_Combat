@@ -54,6 +54,9 @@ public:
 	/** Boolean to say when the leap is running */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	bool bIsLeapctive;
+	/** This integer determines the type of damage (useful to calculate the amount of damage done per attack) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	int DamageType;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	float Health;
