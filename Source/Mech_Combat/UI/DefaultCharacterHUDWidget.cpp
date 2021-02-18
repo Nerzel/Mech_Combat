@@ -14,6 +14,24 @@ void UDefaultCharacterHUDWidget::NativeConstruct() {
     this->GameMode = (AMech_CombatGameMode*)GetWorld()->GetAuthGameMode();
     this->FormatingOptions.MinimumIntegralDigits = 2;
     this->FormatingOptions.MaximumIntegralDigits = 2;
+    this->IconMap = new TMap<FString, UTexture2D*>();
+
+    this->FillTextures("Whirlwind", "/Game/MechCombat/UserInterface/Whirlwind.Whirlwind");
+    this->FillTextures("WhirlwindDark", "/Game/MechCombat/UserInterface/WhirlwindDark.WhirlwindDark");
+    this->FillTextures("Helicopter", "/Game/MechCombat/UserInterface/Helicopter.Helicopter");
+    this->FillTextures("HelicopterDark", "/Game/MechCombat/UserInterface/HelicopterDark.HelicopterDark");
+    this->FillTextures("Leap", "/Game/MechCombat/UserInterface/Leap.Leap");
+    this->FillTextures("LeapDark", "/Game/MechCombat/UserInterface/LeapDark.LeapDark");
+}
+
+void UDefaultCharacterHUDWidget::FillTextures(const FString TextureName, const FString TexturePath) {
+    UTexture2D* Texture;
+
+    Texture = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, *TexturePath));
+
+    if (Texture) {
+        this->IconMap->Add(TextureName, Texture);
+    }
 }
 
 void UDefaultCharacterHUDWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) {
@@ -31,8 +49,28 @@ void UDefaultCharacterHUDWidget::NativeTick(const FGeometry& MyGeometry, float I
         this->AttackEnergyBar->SetPercent(Character->AttackEnergy / 12.0f);
     }
 
-    if(this->MinuteTextBlock && this->SecondTextBlock) {
+    if (this->MinuteTextBlock && this->SecondTextBlock) {
         this->MinuteTextBlock->SetText(FText::AsNumber(GameMode->RemainingMinutes, &this->FormatingOptions));
         this->SecondTextBlock->SetText(FText::AsNumber(GameMode->RemainingSeconds, &this->FormatingOptions));
+    }
+
+    if (this->WirlwindIcon) {
+        this->SetHUDIcon(this->WirlwindIcon, 3, "Whirlwind");
+    }
+
+    if (this->HelicopterIcon) {
+        this->SetHUDIcon(this->HelicopterIcon, 2, "Helicopter");
+    }
+
+    if (this->LeapIcon) {
+        this->SetHUDIcon(this->LeapIcon, 2, "Leap");
+    }
+}
+
+void UDefaultCharacterHUDWidget::SetHUDIcon(UImage* ImageWidget, const int LimitValue, const FString IconName) {
+    if (this->Character->AttackEnergy >= LimitValue) {
+        ImageWidget->SetBrushFromTexture(*this->IconMap->Find(IconName));
+    } else {
+        ImageWidget->SetBrushFromTexture(*this->IconMap->Find(IconName + "Dark"));
     }
 }
