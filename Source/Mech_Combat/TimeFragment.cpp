@@ -17,7 +17,13 @@ ATimeFragment::ATimeFragment() {
 
 // Called when the game starts or when spawned
 void ATimeFragment::BeginPlay() {
+	FTimerDelegate Delegate;
+
 	Super::BeginPlay();
+
+	Delegate.BindLambda([this] { Destroy(); });
+
+	GetWorldTimerManager().SetTimer(this->AutoDestroyTimer, Delegate, 30.0f, false);
 }
 
 // Called every frame

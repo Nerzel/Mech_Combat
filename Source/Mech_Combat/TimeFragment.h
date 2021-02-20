@@ -18,6 +18,7 @@ private:
 	UStaticMeshComponent* Mesh;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	URotatingMovementComponent* RotatingMovementComponent;
+	FTimerHandle AutoDestroyTimer;
 
 protected:
 	// Called when the game starts or when spawned
