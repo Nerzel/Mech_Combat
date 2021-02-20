@@ -19,6 +19,12 @@ ADummyMaster::ADummyMaster() {
 	if (ExplosionParticleAsset.Object != NULL) {
 		this->ExplosionParticle = ExplosionParticleAsset.Object;
 	}
+
+	static ConstructorHelpers::FClassFinder<ATimeFragment> TimeFragmentBPClass(TEXT("/Game/MechCombat/Blueprints/TimeFragment_BP"));
+	if (TimeFragmentBPClass.Class != NULL) {
+		DefaultCollectableClass = TimeFragmentBPClass.Class;
+	}
+
 	this->Health = 1.0f;
 }
 
@@ -35,6 +41,9 @@ void ADummyMaster::NotifyActorBeginOverlap(AActor* OtherActor) {
 			switch (Character->DamageType) {
 				case 1:
 					this->Health -= Cast<AHammerWeapon>(OtherActor)->BaseDamage + 0.2f;
+					if (Character->AttackEnergy < 12) {
+						Character->AttackEnergy++;
+					}
 					break;
 				case 2:
 					this->Health -= Cast<AHammerWeapon>(OtherActor)->BaseDamage + 0.1f;
@@ -54,6 +63,12 @@ void ADummyMaster::NotifyActorBeginOverlap(AActor* OtherActor) {
 			}
 
 			if (this->Health <= 0) {
+				FActorSpawnParameters SpawnParams;
+
+				SpawnParams.Owner = this;
+				SpawnParams.Instigator = this;
+				GetWorld()->SpawnActor<ATimeFragment>(this->DefaultCollectableClass, GetActorTransform(), SpawnParams);
+
 				Destroy();
 			}
 		}

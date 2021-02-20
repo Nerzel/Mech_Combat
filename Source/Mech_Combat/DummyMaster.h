@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "TimeFragment.h"
 #include "GameFramework/Character.h"
 #include "DummyMaster.generated.h"
 
@@ -13,6 +15,8 @@ class ADummyMaster : public ACharacter {
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float Health;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Classes)
+	TSubclassOf<ATimeFragment> DefaultCollectableClass;
 
 private:
 	UParticleSystem* ExplosionParticle;
