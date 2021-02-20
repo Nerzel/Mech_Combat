@@ -65,6 +65,10 @@ void UDefaultCharacterHUDWidget::NativeTick(const FGeometry& MyGeometry, float I
     if (this->LeapIcon) {
         this->SetHUDIcon(this->LeapIcon, 2, "Leap");
     }
+
+    if (this->TimeFragmentNumber) {
+        this->TimeFragmentNumber->SetText(FText::AsNumber(this->Character->TimeFragments, &this->FormatingOptions));
+    }
 }
 
 void UDefaultCharacterHUDWidget::SetHUDIcon(UImage* ImageWidget, const int LimitValue, const FString IconName) {

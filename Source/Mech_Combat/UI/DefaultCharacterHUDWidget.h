@@ -40,6 +40,8 @@ public:
     UImage* HelicopterIcon;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
     UImage* LeapIcon;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UTextBlock* TimeFragmentNumber;
 
 private:
     void SetHUDIcon(UImage* ImageWidget, const int LimitValue, const FString IconName);
