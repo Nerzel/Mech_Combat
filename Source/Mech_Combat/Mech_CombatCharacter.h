@@ -67,6 +67,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	int AttackEnergy;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	int TimeFragments;
+
 	UPROPERTY(EditDefaultsOnly, Category=HUD)
 	TSubclassOf<UDefaultCharacterHUDWidget> DefaultCharacterHUDClass;
 

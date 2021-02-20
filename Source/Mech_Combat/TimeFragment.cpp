@@ -3,6 +3,8 @@
 
 #include "TimeFragment.h"
 
+#include "Mech_CombatCharacter.h"
+
 // Sets default values
 ATimeFragment::ATimeFragment() {
 	RootComponent = CreateDefaultSubobject<USceneComponent>("DefaultSceneComponent");
@@ -23,3 +25,12 @@ void ATimeFragment::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
 }
 
+void ATimeFragment::NotifyActorBeginOverlap(AActor* OtherActor) {
+	Super::NotifyActorEndOverlap(OtherActor);
+
+	if (OtherActor && OtherActor->IsA<AMech_CombatCharacter>()) {
+		Cast<AMech_CombatCharacter>(OtherActor)->TimeFragments++;
+		UE_LOG(LogTemp, Warning, TEXT("%d"), Cast<AMech_CombatCharacter>(OtherActor)->TimeFragments);
+		Destroy();
+	}
+}

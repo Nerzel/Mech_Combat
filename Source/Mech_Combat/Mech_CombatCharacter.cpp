@@ -61,6 +61,7 @@ AMech_CombatCharacter::AMech_CombatCharacter()
 	this->Stamina = 1.0f;
 	this->AttackEnergy = 12;
 	this->DamageType = 0;
+	this->TimeFragments = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////
