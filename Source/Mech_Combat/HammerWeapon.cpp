@@ -5,11 +5,12 @@
 
 // Sets default values
 AHammerWeapon::AHammerWeapon() {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
 	this->Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
-	this->Mesh->AttachToComponent(this->RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	this->Mesh->SetGenerateOverlapEvents(true);
+	RootComponent = this->Mesh;
+
+	PrimaryActorTick.bCanEverTick = true;
+
 	this->BaseDamage = 0.1f;
 }
 
@@ -22,6 +23,4 @@ void AHammerWeapon::BeginPlay() {
 // Called every frame
 void AHammerWeapon::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
-
 }
-

@@ -19,6 +19,6 @@ private:
 
 public:
 	ADummyMaster();
-	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 };
 

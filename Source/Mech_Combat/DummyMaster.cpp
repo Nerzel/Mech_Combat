@@ -22,7 +22,7 @@ ADummyMaster::ADummyMaster() {
 	this->Health = 1.0f;
 }
 
-void ADummyMaster::NotifyActorEndOverlap(AActor* OtherActor) {
+void ADummyMaster::NotifyActorBeginOverlap(AActor* OtherActor) {
 	AMech_CombatCharacter* Character;
 
 	Super::NotifyActorEndOverlap(OtherActor);
