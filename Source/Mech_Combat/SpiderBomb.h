@@ -10,8 +10,18 @@
  * 
  */
 UCLASS()
-class MECH_COMBAT_API ASpiderBomb : public ADummyMaster
-{
+class MECH_COMBAT_API ASpiderBomb : public ADummyMaster {
+
 	GENERATED_BODY()
-	
+
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool bIsArmed;
+
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
+	USkeletalMeshComponent* CarriedBombMesh;
+
+public:
+	ASpiderBomb();
 };
