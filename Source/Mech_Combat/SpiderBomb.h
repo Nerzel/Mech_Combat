@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "DummyMaster.h"
+#include "Perception/PawnSensingComponent.h"
+
 #include "SpiderBomb.generated.h"
 
 /**
@@ -21,7 +23,12 @@ public:
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* CarriedBombMesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"), Category = AI)
+	UPawnSensingComponent* PawnSensing;
 
 public:
 	ASpiderBomb();
+	UFUNCTION()
+	void OnSeePawn(APawn *OtherPAwn);
+	virtual void PostInitializeComponents() override;
 };
