@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "DummyMaster.h"
+#include "Mech_CombatCharacter.h"
 #include "Perception/PawnSensingComponent.h"
 
 #include "SpiderBomb.generated.h"
@@ -21,14 +22,17 @@ public:
 	bool bIsArmed;
 
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* CarriedBombMesh;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"), Category = AI)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"), Category = AI)
 	UPawnSensingComponent* PawnSensing;
+	UPROPERTY(VisibleInstanceOnly)
+	AMech_CombatCharacter* Character;
 
 public:
 	ASpiderBomb();
 	UFUNCTION()
 	void OnSeePawn(APawn *OtherPAwn);
+	virtual void BeginPlay() override;
 	virtual void PostInitializeComponents() override;
 };
