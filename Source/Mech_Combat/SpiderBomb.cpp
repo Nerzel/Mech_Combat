@@ -3,7 +3,7 @@
 
 #include "SpiderBomb.h"
 
-#include "AIController.h"
+#include "DefaultAIController.h"
 #include "Mech_CombatCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -12,9 +12,9 @@ ASpiderBomb::ASpiderBomb() {
     this->CarriedBombMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CarriedBombMesh"));
     this->CarriedBombMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName(TEXT("Core")));
     this->PawnSensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing"));
-    this->PawnSensing->SetPeripheralVisionAngle(60.0f);
-    this->PawnSensing->SightRadius = 6000.0F;
-    AIControllerClass = AAIController::StaticClass();
+    this->PawnSensing->SetPeripheralVisionAngle(60.f);
+    this->PawnSensing->SightRadius = 6000.f;
+    AIControllerClass = ADefaultAIController::StaticClass();
 
     this->bIsArmed = false;
 }
@@ -38,9 +38,23 @@ void ASpiderBomb::OnSeePawn(APawn *OtherPAwn) {
    AAIController* AIController;
 
     if (OtherPAwn && OtherPAwn->IsA<AMech_CombatCharacter>()) {
-        AIController = Cast<AAIController>(GetController());
+        AIController = Cast<ADefaultAIController>(GetController());
         if (AIController && this->Character) {
-            AIController->MoveToActor( this->Character, 200.0f);
+            AIController->MoveToActor( this->Character, 200.f);
         }
     }
+}
+
+void ASpiderBomb::ArmAndDestroy() {
+    this->bIsArmed = true;
+    if (!ExplodeTimer.IsValid()) {
+        GetWorldTimerManager().SetTimer(ExplodeTimer, this, &ASpiderBomb::ExplodeAndDestroy, 3.f, false);
+    }
+}
+
+void ASpiderBomb::ExplodeAndDestroy() {
+    if (ExplosionParticle) {
+        UGameplayStatics::SpawnEmitterAtLocation(this, ExplosionParticle, GetActorLocation(), FRotator::ZeroRotator, FVector(5.f));
+    }
+    Destroy();
 }

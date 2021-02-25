@@ -18,7 +18,7 @@ class MECH_COMBAT_API ASpiderBomb : public ADummyMaster {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsArmed;
 
 private:
@@ -28,6 +28,7 @@ private:
 	UPawnSensingComponent* PawnSensing;
 	UPROPERTY(VisibleInstanceOnly)
 	AMech_CombatCharacter* Character;
+	FTimerHandle ExplodeTimer;
 
 public:
 	ASpiderBomb();
@@ -35,4 +36,6 @@ public:
 	void OnSeePawn(APawn *OtherPAwn);
 	virtual void BeginPlay() override;
 	virtual void PostInitializeComponents() override;
+	void ArmAndDestroy();
+	void ExplodeAndDestroy();
 };

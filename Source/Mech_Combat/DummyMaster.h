@@ -18,7 +18,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Classes)
 	TSubclassOf<ATimeFragment> DefaultCollectableClass;
 
-private:
+protected:
 	UParticleSystem* ExplosionParticle;
 
 public:
