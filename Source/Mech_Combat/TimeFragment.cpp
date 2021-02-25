@@ -36,7 +36,6 @@ void ATimeFragment::NotifyActorBeginOverlap(AActor* OtherActor) {
 
 	if (OtherActor && OtherActor->IsA<AMech_CombatCharacter>()) {
 		Cast<AMech_CombatCharacter>(OtherActor)->TimeFragments++;
-		UE_LOG(LogTemp, Warning, TEXT("%d"), Cast<AMech_CombatCharacter>(OtherActor)->TimeFragments);
 		Destroy();
 	}
 }
