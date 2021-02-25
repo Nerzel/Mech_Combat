@@ -14,9 +14,13 @@ ASpiderBomb::ASpiderBomb() {
     this->PawnSensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing"));
     this->PawnSensing->SetPeripheralVisionAngle(60.f);
     this->PawnSensing->SightRadius = 6000.f;
+    this->BombRadius = CreateDefaultSubobject<USphereComponent>(TEXT("BombRadius"));
+    this->BombRadius->SetupAttachment(RootComponent);
+    this->BombRadius->InitSphereRadius(400.f);
     AIControllerClass = ADefaultAIController::StaticClass();
 
     this->bIsArmed = false;
+    this->bIsPlayerInRadius = false;
 }
 
 void ASpiderBomb::BeginPlay() {
@@ -56,5 +60,20 @@ void ASpiderBomb::ExplodeAndDestroy() {
     if (ExplosionParticle) {
         UGameplayStatics::SpawnEmitterAtLocation(this, ExplosionParticle, GetActorLocation(), FRotator::ZeroRotator, FVector(5.f));
     }
+    if (this->bIsPlayerInRadius) {
+        this->Character->Health -= 0.3f;
+    }
     Destroy();
+}
+
+void ASpiderBomb::NotifyActorBeginOverlap(AActor* OtherActor) {
+    if (OtherActor->IsA<AMech_CombatCharacter>()) {
+        this->bIsPlayerInRadius = true;
+    }
+}
+
+void ASpiderBomb::NotifyActorEndOverlap(AActor* OtherActor) {
+    if (OtherActor->IsA<AMech_CombatCharacter>()) {
+        this->bIsPlayerInRadius = false;
+    }
 }

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "DummyMaster.h"
 #include "Mech_CombatCharacter.h"
+#include "Components/SphereComponent.h"
 #include "Perception/PawnSensingComponent.h"
 
 #include "SpiderBomb.generated.h"
@@ -20,12 +21,16 @@ class MECH_COMBAT_API ASpiderBomb : public ADummyMaster {
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsArmed;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bIsPlayerInRadius;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* CarriedBombMesh;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"), Category = AI)
 	UPawnSensingComponent* PawnSensing;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
+	USphereComponent* BombRadius;
 	UPROPERTY(VisibleInstanceOnly)
 	AMech_CombatCharacter* Character;
 	FTimerHandle ExplodeTimer;
@@ -38,4 +43,6 @@ public:
 	virtual void PostInitializeComponents() override;
 	void ArmAndDestroy();
 	void ExplodeAndDestroy();
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
 };
