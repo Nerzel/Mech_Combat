@@ -14,17 +14,15 @@ void ADefaultAIController::OnMoveCompleted(FAIRequestID RequestID, const FPathFo
 
     APawn* PossessedPawn = GetPawn();
 
-    if (PossessedPawn->IsA<ASpiderBomb>()) {
-        ASpiderBomb* SpiderBomb;
-
-        SpiderBomb = Cast<ASpiderBomb>(PossessedPawn);
-
-        if (SpiderBomb->bIsChasing) {
+    if (PossessedPawn->IsA<ADummyMaster>()) {
+        if (Cast<ADummyMaster>(PossessedPawn)->bIsChasing) {
             if (Result.IsSuccess()) {
-                SpiderBomb->ArmAndDestroy();
+                if (PossessedPawn->IsA<ASpiderBomb>()) {
+                    Cast<ASpiderBomb>(PossessedPawn)->ArmAndDestroy();
+                }
             }
         } else {
-            GetWorldTimerManager().SetTimer(this->RoamTimer, SpiderBomb, &ASpiderBomb::RoamToRandomLocation, 5.f, false);
+            GetWorldTimerManager().SetTimer(this->RoamTimer, Cast<ADummyMaster>(PossessedPawn), &ADummyMaster::RoamToRandomLocation, 5.f, false);
         }
     }
 }
