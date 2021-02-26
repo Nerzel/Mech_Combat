@@ -24,11 +24,12 @@ ADummyMaster::ADummyMaster() {
 	if (TimeFragmentBPClass.Class != NULL) {
 		DefaultCollectableClass = TimeFragmentBPClass.Class;
 	}
+	this->GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ADummyMaster::OnBeginOverlap);
 
 	this->Health = 1.0f;
 }
 
-void ADummyMaster::NotifyActorBeginOverlap(AActor* OtherActor) {
+void ADummyMaster::OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
 	AMech_CombatCharacter* Character;
 
 	Super::NotifyActorEndOverlap(OtherActor);

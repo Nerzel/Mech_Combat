@@ -18,6 +18,7 @@ ASpiderBomb::ASpiderBomb() {
     this->BombRadius = CreateDefaultSubobject<USphereComponent>(TEXT("BombRadius"));
     this->BombRadius->SetupAttachment(RootComponent);
     this->BombRadius->InitSphereRadius(500.f);
+    this->BombRadius->OnComponentBeginOverlap.AddDynamic(this, &ASpiderBomb::OnBombRadiusBeginOverlap);
     AIControllerClass = ADefaultAIController::StaticClass();
 
     this->bIsArmed = false;
@@ -68,23 +69,23 @@ void ASpiderBomb::ExplodeAndDestroy() {
     Destroy();
 }
 
-void ASpiderBomb::NotifyActorBeginOverlap(AActor* OtherActor) {
-    if (OtherActor->IsA<AMech_CombatCharacter>()) {
-        this->bIsPlayerInRadius = true;
-    }
-}
-
-void ASpiderBomb::NotifyActorEndOverlap(AActor* OtherActor) {
-    if (OtherActor->IsA<AMech_CombatCharacter>()) {
-        this->bIsPlayerInRadius = false;
-    }
-}
-
 void ASpiderBomb::RoamToRandomLocation() {
      const UNavigationSystemV1* navSystem = UNavigationSystemV1::GetCurrent(this);
      FNavLocation NavLoc;
 
      if (navSystem->GetRandomReachablePointInRadius(GetActorLocation(), this->RoamingRadius, NavLoc)) {
          this->AIController->MoveToLocation(NavLoc);
+     }
+}
+
+void ASpiderBomb::OnBombRadiusBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
+    if (OtherActor->IsA<AMech_CombatCharacter>()) {
+        this->bIsPlayerInRadius = true;
+    }
+}
+
+void ASpiderBomb::OnBombRadiusEndOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
+    if (OtherActor->IsA<AMech_CombatCharacter>()) {
+         this->bIsPlayerInRadius = false;
      }
 }

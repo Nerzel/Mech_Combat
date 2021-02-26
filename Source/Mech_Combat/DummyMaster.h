@@ -23,6 +23,7 @@ protected:
 
 public:
 	ADummyMaster();
-	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	UFUNCTION()
+	void OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 };
 
