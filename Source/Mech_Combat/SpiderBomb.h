@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "AIController.h"
 #include "DummyMaster.h"
 #include "Mech_CombatCharacter.h"
 #include "Components/SphereComponent.h"
@@ -23,6 +25,10 @@ public:
 	bool bIsArmed;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsPlayerInRadius;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float RoamingRadius;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool bIsChasing;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
@@ -34,6 +40,8 @@ private:
 	UPROPERTY(VisibleInstanceOnly)
 	AMech_CombatCharacter* Character;
 	FTimerHandle ExplodeTimer;
+	UPROPERTY(VisibleInstanceOnly)
+	AAIController* AIController;
 
 public:
 	ASpiderBomb();
@@ -45,4 +53,5 @@ public:
 	void ExplodeAndDestroy();
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
+	void RoamToRandomLocation();
 };

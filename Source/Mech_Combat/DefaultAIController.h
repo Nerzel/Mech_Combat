@@ -17,5 +17,8 @@ class MECH_COMBAT_API ADefaultAIController : public AAIController {
 public:
 	ADefaultAIController();
 	virtual void OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result) override;
+
+private:
+	FTimerHandle RoamTimer;
 	
 };

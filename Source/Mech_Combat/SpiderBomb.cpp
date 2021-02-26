@@ -5,6 +5,7 @@
 
 #include "DefaultAIController.h"
 #include "Mech_CombatCharacter.h"
+#include "NavigationSystem.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -16,19 +17,22 @@ ASpiderBomb::ASpiderBomb() {
     this->PawnSensing->SightRadius = 6000.f;
     this->BombRadius = CreateDefaultSubobject<USphereComponent>(TEXT("BombRadius"));
     this->BombRadius->SetupAttachment(RootComponent);
-    this->BombRadius->InitSphereRadius(400.f);
+    this->BombRadius->InitSphereRadius(500.f);
     AIControllerClass = ADefaultAIController::StaticClass();
 
     this->bIsArmed = false;
     this->bIsPlayerInRadius = false;
+    this->bIsChasing = false;
+    this->RoamingRadius = 5000.f;
 }
 
 void ASpiderBomb::BeginPlay() {
     Super::BeginPlay();
 
     this->Character = Cast<AMech_CombatCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
+    this->AIController = Cast<ADefaultAIController>(GetController());
+    RoamToRandomLocation();
 }
-
 
 void ASpiderBomb::PostInitializeComponents() {
     Super::PostInitializeComponents();
@@ -39,12 +43,10 @@ void ASpiderBomb::PostInitializeComponents() {
 }
 
 void ASpiderBomb::OnSeePawn(APawn *OtherPAwn) {
-   AAIController* AIController;
-
     if (OtherPAwn && OtherPAwn->IsA<AMech_CombatCharacter>()) {
-        AIController = Cast<ADefaultAIController>(GetController());
         if (AIController && this->Character) {
-            AIController->MoveToActor( this->Character, 200.f);
+            this->bIsChasing = true;
+            this->AIController->MoveToActor( this->Character, 200.f);
         }
     }
 }
@@ -76,4 +78,13 @@ void ASpiderBomb::NotifyActorEndOverlap(AActor* OtherActor) {
     if (OtherActor->IsA<AMech_CombatCharacter>()) {
         this->bIsPlayerInRadius = false;
     }
+}
+
+void ASpiderBomb::RoamToRandomLocation() {
+     const UNavigationSystemV1* navSystem = UNavigationSystemV1::GetCurrent(this);
+     FNavLocation NavLoc;
+
+     if (navSystem->GetRandomReachablePointInRadius(GetActorLocation(), this->RoamingRadius, NavLoc)) {
+         this->AIController->MoveToLocation(NavLoc);
+     }
 }
