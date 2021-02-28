@@ -41,7 +41,7 @@ public:
     virtual void BeginPlay() override;
 	virtual void PostInitializeComponents() override;
 	UFUNCTION()
-	void OnSeePawn(APawn *OtherPAwn);
+	virtual void OnSeePawn(APawn *OtherPAwn);
 	UFUNCTION()
 	void OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	void RoamToRandomLocation();
