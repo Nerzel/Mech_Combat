@@ -22,15 +22,11 @@ ASpiderTurret::ASpiderTurret() {
 
 void ASpiderTurret::BeginPlay() {
 	Super::BeginPlay();
-
-	GetWorldTimerManager().SetTimer(ShootingTimer, this, &ASpiderTurret::Shoot, this->ShootRate, true);
 }
 
 void ASpiderTurret::Shoot() {
-	if (this->bIsShooting) {
-		GetWorld()->SpawnActor<AProjectile>(this->DefaultProjectileClass, this->CarriedTurretMesh->GetSocketTransform(FName("RightEdge")));
-		GetWorld()->SpawnActor<AProjectile>(this->DefaultProjectileClass, this->CarriedTurretMesh->GetSocketTransform(FName("LeftEdge")));
-	}
+	GetWorld()->SpawnActor<AProjectile>(this->DefaultProjectileClass, this->CarriedTurretMesh->GetSocketTransform(FName("RightEdge")));
+	GetWorld()->SpawnActor<AProjectile>(this->DefaultProjectileClass, this->CarriedTurretMesh->GetSocketTransform(FName("LeftEdge")));
 }
 
 void ASpiderTurret::OnSeePawn(APawn *OtherPAwn) {
@@ -39,8 +35,10 @@ void ASpiderTurret::OnSeePawn(APawn *OtherPAwn) {
 	if (OtherPAwn && OtherPAwn->IsA<AMech_CombatCharacter>()) {
 		if (GetDistanceTo(OtherPAwn) < this->ShootRange) {
 			this->bIsShooting = true;
+			GetWorldTimerManager().SetTimer(ShootingTimer, this, &ASpiderTurret::Shoot, this->ShootRate, true);
 		} else {
 			this->bIsShooting = false;
+			GetWorldTimerManager().ClearTimer(ShootingTimer);
 		}
 	}
 }
