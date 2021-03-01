@@ -43,7 +43,8 @@ public:
 	UFUNCTION()
 	virtual void OnSeePawn(APawn *OtherPAwn);
 	UFUNCTION()
-	void OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+			class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	void RoamToRandomLocation();
 };
 

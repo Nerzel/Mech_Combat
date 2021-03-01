@@ -14,10 +14,18 @@ ASpiderBomb::ASpiderBomb() {
     this->BombRadius = CreateDefaultSubobject<USphereComponent>(TEXT("BombRadius"));
     this->BombRadius->SetupAttachment(RootComponent);
     this->BombRadius->InitSphereRadius(500.f);
-    this->BombRadius->OnComponentBeginOverlap.AddDynamic(this, &ASpiderBomb::OnBombRadiusBeginOverlap);
 
     this->bIsArmed = false;
     this->bIsPlayerInRadius = false;
+}
+
+void ASpiderBomb::PostInitializeComponents() {
+    Super::PostInitializeComponents();
+
+    if (this->BombRadius) {
+        this->BombRadius->OnComponentBeginOverlap.AddDynamic(this, &ASpiderBomb::OnBombRadiusBeginOverlap);
+        this->BombRadius->OnComponentEndOverlap.AddDynamic(this, &ASpiderBomb::OnBombRadiusEndOverlap);
+    }
 }
 
 void ASpiderBomb::ArmAndDestroy() {
@@ -37,13 +45,15 @@ void ASpiderBomb::ExplodeAndDestroy() {
     Destroy();
 }
 
-void ASpiderBomb::OnBombRadiusBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
+void ASpiderBomb::OnBombRadiusBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+        class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
     if (OtherActor->IsA<AMech_CombatCharacter>()) {
         this->bIsPlayerInRadius = true;
     }
 }
 
-void ASpiderBomb::OnBombRadiusEndOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
+void ASpiderBomb::OnBombRadiusEndOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+        class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
     if (OtherActor->IsA<AMech_CombatCharacter>()) {
          this->bIsPlayerInRadius = false;
      }

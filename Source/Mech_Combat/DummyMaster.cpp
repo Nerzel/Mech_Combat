@@ -26,7 +26,6 @@ ADummyMaster::ADummyMaster() {
 	if (TimeFragmentBPClass.Class != NULL) {
 		DefaultCollectableClass = TimeFragmentBPClass.Class;
 	}
-	this->GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ADummyMaster::OnBeginOverlap);
 	this->PawnSensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing"));
 	this->PawnSensing->SetPeripheralVisionAngle(60.f);
 	this->PawnSensing->SightRadius = 6000.f;
@@ -38,20 +37,24 @@ ADummyMaster::ADummyMaster() {
 	this->RoamingRadius = 5000.f;
 }
 
-void ADummyMaster::BeginPlay() {
-	Super::BeginPlay();
-
-	this->PlayerCharacter = Cast<AMech_CombatCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
-	this->AIController = Cast<ADefaultAIController>(GetController());
-	RoamToRandomLocation();
-}
-
 void ADummyMaster::PostInitializeComponents() {
 	Super::PostInitializeComponents();
 
 	if (this->PawnSensing) {
 		this->PawnSensing->OnSeePawn.AddDynamic(this, &ADummyMaster::OnSeePawn);
 	}
+
+	if (this->GetCapsuleComponent()) {
+		this->GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ADummyMaster::OnBeginOverlap);
+	}
+}
+
+void ADummyMaster::BeginPlay() {
+	Super::BeginPlay();
+
+	this->PlayerCharacter = Cast<AMech_CombatCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
+	this->AIController = Cast<ADefaultAIController>(GetController());
+	RoamToRandomLocation();
 }
 
 void ADummyMaster::OnSeePawn(APawn *OtherPAwn) {
@@ -63,10 +66,9 @@ void ADummyMaster::OnSeePawn(APawn *OtherPAwn) {
 	}
 }
 
-void ADummyMaster::OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
+void ADummyMaster::OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+		class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
 	AMech_CombatCharacter* Character;
-
-	Super::NotifyActorEndOverlap(OtherActor);
 
 	if (OtherActor && OtherActor->IsA<AHammerWeapon>()) {
 		Character = Cast<AMech_CombatCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
