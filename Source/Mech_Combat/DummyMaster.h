@@ -28,6 +28,7 @@ public:
 	float RoamingRadius;
 
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
 	UParticleSystem* ExplosionParticle;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"), Category = AI)
 	UPawnSensingComponent* PawnSensing;

@@ -23,17 +23,24 @@ public:
 
 private:
 	FTimerHandle DestroyTimer;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
+	UParticleSystem* ExplosionParticle;
 
 public:	
 	// Sets default values for this actor's properties
 	AProjectile();
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+	virtual void PostInitializeComponents() override;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+private:
+	UFUNCTION()
+	void OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+			class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+			const FHitResult& SweepResult);
 
 };

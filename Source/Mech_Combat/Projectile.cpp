@@ -3,7 +3,11 @@
 
 #include "Projectile.h"
 
-// Sets default values
+#include "Mech_CombatCharacter.h"
+#include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystem.h"
+
+ // Sets default values
 AProjectile::AProjectile() {
 	RootComponent = CreateDefaultSubobject<USceneComponent>(FName("DefaultSceneComponent"));
 	this->Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
@@ -15,8 +19,21 @@ AProjectile::AProjectile() {
 	this->ProjectileMovementComponent->MaxSpeed = 5000.f,
 	this->ProjectileMovementComponent->Velocity = FVector(5000.f, 1.f, 1.f);
 
+	static ConstructorHelpers::FObjectFinder<UParticleSystem> ExplosionParticleAsset(TEXT("/Game/StarterContent/Particles/P_Explosion.P_Explosion"));
+	if (ExplosionParticleAsset.Object != NULL) {
+		this->ExplosionParticle = ExplosionParticleAsset.Object;
+	}
+
 	PrimaryActorTick.bCanEverTick = false;
 	this->LifeTime = 2.5f;
+}
+
+void AProjectile::PostInitializeComponents() {
+	Super::PostInitializeComponents();
+
+	if (this->Mesh) {
+		this->Mesh->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::OnBeginOverlap);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -26,7 +43,6 @@ void AProjectile::BeginPlay() {
 	Super::BeginPlay();
 
 	Delegate.BindLambda([this] { Destroy(); });
-
 	GetWorldTimerManager().SetTimer(DestroyTimer, Delegate, this->LifeTime, false);
 }
 
@@ -35,3 +51,14 @@ void AProjectile::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
 }
 
+void AProjectile::OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+		class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+		const FHitResult& SweepResult) {
+	if (OtherActor && OtherActor->IsA<AMech_CombatCharacter>()) {
+		Cast<AMech_CombatCharacter>(OtherActor)->Health -= 0.05f;
+		if (this->ExplosionParticle) {
+			UGameplayStatics::SpawnEmitterAtLocation(this, this->ExplosionParticle, GetActorLocation());
+		}
+		Destroy();
+	}
+}
