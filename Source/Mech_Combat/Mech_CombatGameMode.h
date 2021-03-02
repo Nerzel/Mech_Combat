@@ -14,6 +14,9 @@ class AMech_CombatGameMode : public AGameModeBase {
 public:
 	int RemainingMinutes;
 	int RemainingSeconds;
+	int WaveNumber;
+	int NomberOfBots;
+	int MaxBots;
 
 private:
 	FTimerHandle SecondIncreaseTimer;
