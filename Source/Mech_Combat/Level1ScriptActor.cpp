@@ -21,14 +21,18 @@ void ALevel1ScriptActor::BeginPlay() {
 	Super::BeginPlay();
 
 	this->GameMode = Cast<AMech_CombatGameMode>(GetWorld()->GetAuthGameMode());
+	SpawnBots();
 }
 
-void ALevel1ScriptActor::SpawnBots(TArray<ASpawner*> Spawners) {
-	SpawnTimerDelegate.BindUFunction(this, FName("SpawnBotByClass"), Spawners);
-	GetWorld()->GetTimerManager().SetTimer(this->SpawnTimer, SpawnTimerDelegate, 3.f, true);
+void ALevel1ScriptActor::SpawnBots() {
+
+	if (this->Spawners.Num()) {
+		GetWorld()->GetTimerManager().SetTimer(this->SpawnTimer, this, &ALevel1ScriptActor::SpawnBotByClass, 3.f, true);
+	}
+
 }
 
-void ALevel1ScriptActor::SpawnBotByClass(TArray<ASpawner*> Spawners) {
+void ALevel1ScriptActor::SpawnBotByClass() {
 
 	if (this->EnnemyTypeFlag) {
 		Spawners[FMath::RandRange(0, Spawners.Num() - 1)]->SpawnBot(DefaultSpiderBombClass);
@@ -36,9 +40,24 @@ void ALevel1ScriptActor::SpawnBotByClass(TArray<ASpawner*> Spawners) {
 		Spawners[FMath::RandRange(0, Spawners.Num() - 1)]->SpawnBot(DefaultSpiderTurretClass);
 	}
 
-	if (this->GameMode->NumberOfBots >= this->GameMode->MaxBots) {
+	if (this->GameMode->NumberOfBots + this->GameMode->NumberOfKills == this->GameMode->MaxBots) {
 		GetWorld()->GetTimerManager().ClearTimer(SpawnTimer);
 	}
 
+	if (!this->NewWaveCheckTimer.IsValid()) {
+		GetWorld()->GetTimerManager().SetTimer(this->NewWaveCheckTimer, this, &ALevel1ScriptActor::CheckNewWave, 2.f, true);
+	}
+
 	this->EnnemyTypeFlag = !this->EnnemyTypeFlag;
+}
+
+void ALevel1ScriptActor::CheckNewWave() {
+
+	if (this->GameMode->NumberOfBots == 0) {
+		GetWorld()->GetTimerManager().ClearTimer(this->NewWaveCheckTimer);
+		this->GameMode->NumberOfKills = 0;
+		this->GameMode->WaveNumber++;
+		SpawnBots();
+	}
+
 }

@@ -17,6 +17,7 @@ public:
 	int WaveNumber;
 	int NumberOfBots;
 	int MaxBots;
+	int NumberOfKills;
 
 private:
 	FTimerHandle SecondIncreaseTimer;

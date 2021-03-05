@@ -107,6 +107,8 @@ void ADummyMaster::OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, cla
 				SpawnParams.Instigator = this;
 				GetWorld()->SpawnActor<ATimeFragment>(this->DefaultCollectableClass, GetActorTransform(), SpawnParams);
 
+				Cast<AMech_CombatGameMode>(GetWorld()->GetAuthGameMode())->NumberOfBots--;
+				Cast<AMech_CombatGameMode>(GetWorld()->GetAuthGameMode())->NumberOfKills++;
 				Destroy();
 			}
 		}

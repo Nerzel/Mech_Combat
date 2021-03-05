@@ -15,6 +15,7 @@ AMech_CombatGameMode::AMech_CombatGameMode() {
 	this->WaveNumber = 0;
 	this->NumberOfBots = 0;
 	this->MaxBots = 5;
+	this->NumberOfKills = 0;
 }
 
 void AMech_CombatGameMode::StartPlay() {

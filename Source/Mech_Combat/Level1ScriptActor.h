@@ -28,16 +28,17 @@ public:
 private:
 	bool EnnemyTypeFlag;
 	FTimerHandle SpawnTimer;
-	FTimerDelegate SpawnTimerDelegate;
+	FTimerHandle NewWaveCheckTimer;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Classes, meta=(AllowPrivateAccess = "true"))
+	TArray<ASpawner*> Spawners;
 
 public:
 	ALevel1ScriptActor();
 
 private:
 	virtual void BeginPlay() override;
-	UFUNCTION(BlueprintCallable, Category = LevelBlueprint)
-	void SpawnBots(TArray<ASpawner*> Spawners);
-	UFUNCTION()
-	void SpawnBotByClass(TArray<ASpawner*> Spawners);
+	void SpawnBots();
+	void SpawnBotByClass();
+	void CheckNewWave();
 	
 };
