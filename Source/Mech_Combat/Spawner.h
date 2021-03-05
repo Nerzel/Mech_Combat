@@ -3,14 +3,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "SpiderBomb.h"
+#include "SpiderTurret.h"
 #include "GameFramework/Actor.h"
 #include "Spawner.generated.h"
 
 UCLASS()
-class MECH_COMBAT_API ASpawner : public AActor
-{
+class MECH_COMBAT_API ASpawner : public AActor {
+
 	GENERATED_BODY()
-	
+
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	AMech_CombatGameMode* GameMode;
+
 public:	
 	// Sets default values for this actor's properties
 	ASpawner();
@@ -19,8 +26,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+public:
+	void SpawnBot(UClass* Class);
 
 };

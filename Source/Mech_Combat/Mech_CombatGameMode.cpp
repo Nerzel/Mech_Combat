@@ -13,13 +13,14 @@ AMech_CombatGameMode::AMech_CombatGameMode() {
 	this->RemainingMinutes = 0;
 	this->RemainingSeconds = 0;
 	this->WaveNumber = 0;
-	this->NomberOfBots = 0;
+	this->NumberOfBots = 0;
 	this->MaxBots = 5;
 }
 
 void AMech_CombatGameMode::StartPlay() {
 	Super::StartPlay();
 
+	this->WaveNumber ++;
 	GetWorldTimerManager().SetTimer(SecondIncreaseTimer, this, &AMech_CombatGameMode::IncreaseTimer, 1.0f, true);
 }
 

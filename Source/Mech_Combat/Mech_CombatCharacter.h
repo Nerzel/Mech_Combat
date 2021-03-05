@@ -9,6 +9,8 @@
 
 #include "Mech_CombatCharacter.generated.h"
 
+DECLARE_DELEGATE_OneParam(FStopSprintingDelegate, bool);
+
 UCLASS(config=Game)
 class AMech_CombatCharacter : public ACharacter
 {
@@ -82,6 +84,7 @@ private:
 	FTimerHandle EnergyDecreaseTimer;
 	FTimerHandle EnergyIncreaseTimer;
 	FTimerHandle LeapTimer;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	UDefaultCharacterHUDWidget* CharacterHUDWidget;
 
 protected:
@@ -127,7 +130,6 @@ protected:
 
 	/** Called when srpint button is released to get back to normal speed*/
 	void StopSprinting(const bool bRefillStamina);
-	DECLARE_DELEGATE_OneParam(FStopSprintingDelegate, bool);
 
 	/** Called by timer handler to decrease energy while sprinting*/
 	void DecreaseStaminaWhileSprinting();

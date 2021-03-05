@@ -16,7 +16,7 @@
 
 ADummyMaster::ADummyMaster() {
 	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+	GetCapsuleComponent()->InitCapsuleSize(120.f, 140.0f);
 	static ConstructorHelpers::FObjectFinder<UParticleSystem> ExplosionParticleAsset(TEXT("/Game/StarterContent/Particles/P_Explosion.P_Explosion"));
 	if (ExplosionParticleAsset.Object != NULL) {
 		this->ExplosionParticle = ExplosionParticleAsset.Object;
@@ -35,6 +35,7 @@ ADummyMaster::ADummyMaster() {
 	this->Health = 1.0f;
 	this->bIsChasing = false;
 	this->RoamingRadius = 5000.f;
+	this->AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 void ADummyMaster::PostInitializeComponents() {

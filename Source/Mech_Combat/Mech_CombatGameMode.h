@@ -15,7 +15,7 @@ public:
 	int RemainingMinutes;
 	int RemainingSeconds;
 	int WaveNumber;
-	int NomberOfBots;
+	int NumberOfBots;
 	int MaxBots;
 
 private:

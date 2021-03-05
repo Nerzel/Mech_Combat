@@ -22,7 +22,7 @@ void ADefaultAIController::OnMoveCompleted(FAIRequestID RequestID, const FPathFo
                 }
             }
         } else {
-            GetWorldTimerManager().SetTimer(this->RoamTimer, Cast<ADummyMaster>(PossessedPawn), &ADummyMaster::RoamToRandomLocation, 5.f, false);
+            GetWorldTimerManager().SetTimer(this->RoamTimer, Cast<ADummyMaster>(PossessedPawn), &ADummyMaster::RoamToRandomLocation, 3.f, false);
         }
     }
 }
