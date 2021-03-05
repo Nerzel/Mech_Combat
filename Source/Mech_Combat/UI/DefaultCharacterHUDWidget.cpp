@@ -50,8 +50,8 @@ void UDefaultCharacterHUDWidget::NativeTick(const FGeometry& MyGeometry, float I
     }
 
     if (this->MinuteTextBlock && this->SecondTextBlock) {
-        this->MinuteTextBlock->SetText(FText::AsNumber(GameMode->RemainingMinutes, &this->FormatingOptions));
-        this->SecondTextBlock->SetText(FText::AsNumber(GameMode->RemainingSeconds, &this->FormatingOptions));
+        this->MinuteTextBlock->SetText(FText::AsNumber(this->GameMode->RemainingMinutes, &this->FormatingOptions));
+        this->SecondTextBlock->SetText(FText::AsNumber(this->GameMode->RemainingSeconds, &this->FormatingOptions));
     }
 
     if (this->WirlwindIcon) {
@@ -68,6 +68,14 @@ void UDefaultCharacterHUDWidget::NativeTick(const FGeometry& MyGeometry, float I
 
     if (this->TimeFragmentNumber) {
         this->TimeFragmentNumber->SetText(FText::AsNumber(this->Character->TimeFragments, &this->FormatingOptions));
+    }
+
+    if (this->WaveNumber) {
+        this->WaveNumber->SetText(FText::AsNumber(this->GameMode->WaveNumber, &this->FormatingOptions));
+    }
+
+    if (this->NumberOfEnemies) {
+        this->NumberOfEnemies->SetText(FText::AsNumber(this->GameMode->NumberOfBots, &this->FormatingOptions));
     }
 }
 

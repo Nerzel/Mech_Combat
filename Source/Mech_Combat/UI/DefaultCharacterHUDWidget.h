@@ -42,6 +42,10 @@ public:
     UImage* LeapIcon;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
     UTextBlock* TimeFragmentNumber;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UTextBlock* WaveNumber;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UTextBlock* NumberOfEnemies;
 
 private:
     void SetHUDIcon(UImage* ImageWidget, const int LimitValue, const FString IconName);
