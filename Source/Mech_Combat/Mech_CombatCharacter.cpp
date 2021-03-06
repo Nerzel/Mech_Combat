@@ -12,12 +12,12 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AMech_CombatCharacter
 
-AMech_CombatCharacter::AMech_CombatCharacter()
-{
+AMech_CombatCharacter::AMech_CombatCharacter() {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
@@ -62,6 +62,8 @@ AMech_CombatCharacter::AMech_CombatCharacter()
 	this->AttackEnergy = 12;
 	this->DamageType = 0;
 	this->TimeFragments = 0;
+	this->bIsAtBench = false;
+	this->bIsShopOpened = false;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -82,6 +84,7 @@ void AMech_CombatCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 	PlayerInputComponent->BindAction("HelicopterAttack", IE_Pressed, this, &AMech_CombatCharacter::ExecuteHelicopterAttack);
 	PlayerInputComponent->BindAction("HelicopterAttack", IE_Released, this, &AMech_CombatCharacter::StopHelicopterAttack);
 	PlayerInputComponent->BindAction("Leap", IE_Pressed, this, &AMech_CombatCharacter::ExecuteLeap);
+	PlayerInputComponent->BindAction("ShopMenu", IE_Pressed, this, &AMech_CombatCharacter::ToggleShopMenu);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMech_CombatCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMech_CombatCharacter::MoveRight);
@@ -191,6 +194,12 @@ void AMech_CombatCharacter::BeginPlay() {
 		this->CharacterHUDWidget->AddToViewport();
 	}
 
+	if (this->DefaultShopMenuClass) {
+		this->ShopMenuWidget = CreateWidget<UShopMenuWidget>(GetWorld(), DefaultShopMenuClass, FName(TEXT("DefaultShopMenu")));
+		this->ShopMenuWidget->SetVisibility(ESlateVisibility::Hidden);
+		this->ShopMenuWidget->AddToViewport();
+	}
+
 	CharacterMesh = GetMesh();
 	HammerSocketTransform = CharacterMesh->GetSocketTransform(FName(TEXT("HammerSocket")), RTS_World);
 	GetWorld()->SpawnActor<AHammerWeapon>(this->HammerWeaponBP, HammerSocketTransform)->AttachToComponent(
@@ -207,6 +216,10 @@ void AMech_CombatCharacter::BeginPlay() {
 
 UDefaultCharacterHUDWidget* AMech_CombatCharacter::GetCharacterHUDWidget() {
 	return this->CharacterHUDWidget;
+}
+
+UShopMenuWidget* AMech_CombatCharacter::GetShopMenHUDWidget() {
+	return this->ShopMenuWidget;
 }
 
 void AMech_CombatCharacter::StartSprinting() {
@@ -298,3 +311,24 @@ void AMech_CombatCharacter::StopLeap() {
 	this->bIsAlreadyAttacking = false;
 	this->DamageType = 0;
 }
+
+void AMech_CombatCharacter::ToggleShopMenu() {
+
+	if (this->bIsAtBench) {
+		if (this->bIsShopOpened) {
+			this->ShopMenuWidget->SetVisibility(ESlateVisibility::Hidden);
+			GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = false;
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(FInputModeGameOnly());
+			this->bIsShopOpened = false;
+		} else {
+			this->ShopMenuWidget->SetVisibility(ESlateVisibility::Visible);
+			GetCharacterMovement()->DisableMovement();
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = true;
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(FInputModeGameAndUI());
+			this->bIsShopOpened = true;
+		}
+	}
+
+}
+

@@ -6,14 +6,16 @@
 #include "HammerWeapon.h"
 #include "GameFramework/Character.h"
 #include "UI/DefaultCharacterHUDWidget.h"
+#include "UI/ShopMenuWidget.h"
+
 
 #include "Mech_CombatCharacter.generated.h"
 
 DECLARE_DELEGATE_OneParam(FStopSprintingDelegate, bool);
 
 UCLASS(config=Game)
-class AMech_CombatCharacter : public ACharacter
-{
+class AMech_CombatCharacter : public ACharacter {
+
 	GENERATED_BODY()
 
 	/** Camera boom positioning the camera behind the character */
@@ -23,6 +25,7 @@ class AMech_CombatCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
+
 public:
 	AMech_CombatCharacter();
 
@@ -72,8 +75,17 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	int TimeFragments;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	bool bIsAtBench;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	bool bIsShopOpened;
+
 	UPROPERTY(EditDefaultsOnly, Category=HUD)
 	TSubclassOf<UDefaultCharacterHUDWidget> DefaultCharacterHUDClass;
+
+	UPROPERTY(EditDefaultsOnly, Category=HUD)
+	TSubclassOf<UShopMenuWidget> DefaultShopMenuClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Weapon)
 	TSubclassOf<AHammerWeapon> HammerWeaponBP;
@@ -86,6 +98,8 @@ private:
 	FTimerHandle LeapTimer;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	UDefaultCharacterHUDWidget* CharacterHUDWidget;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
+	UShopMenuWidget* ShopMenuWidget;
 
 protected:
 
@@ -162,6 +176,8 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 	virtual void BeginPlay() override;
 	UDefaultCharacterHUDWidget* GetCharacterHUDWidget();
+	UShopMenuWidget* GetShopMenHUDWidget();
+	void ToggleShopMenu();
 
 };
 
