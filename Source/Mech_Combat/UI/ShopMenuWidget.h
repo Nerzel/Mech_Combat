@@ -4,14 +4,53 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Button.h"
+#include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
+
 #include "ShopMenuWidget.generated.h"
 
+class AMech_CombatGameMode;
+class AMech_CombatCharacter;
 /**
  * 
  */
 UCLASS()
-class MECH_COMBAT_API UShopMenuWidget : public UUserWidget
-{
+class MECH_COMBAT_API UShopMenuWidget : public UUserWidget {
+
 	GENERATED_BODY()
-	
+
+public:
+	UShopMenuWidget(const FObjectInitializer& ObjectInitializer);
+	virtual void NativeConstruct() override;
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* CurrentTimeFragments;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* ReplenishHealthPrice;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* ReplenishStaminaPrice;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UButton* ReplenishHealth;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UButton* ReplenishStamina;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UProgressBar* HealthBar;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UProgressBar* StaminaBar;
+
+private:
+	UPROPERTY(VisibleInstanceOnly)
+	AMech_CombatCharacter* Character;
+	UPROPERTY(VisibleInstanceOnly)
+	AMech_CombatGameMode* GameMode;
+	FNumberFormattingOptions FormatingOptions2Ints;
+	FNumberFormattingOptions FormatingOptions3Ints;
+
+public:
+	UFUNCTION()
+	void OnReplishHealthClick();
+	UFUNCTION()
+	void OnReplishStaminaClick();
+
 };

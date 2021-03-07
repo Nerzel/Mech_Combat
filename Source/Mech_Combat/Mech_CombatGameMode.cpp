@@ -16,12 +16,14 @@ AMech_CombatGameMode::AMech_CombatGameMode() {
 	this->NumberOfBots = 0;
 	this->MaxBots = 5;
 	this->NumberOfKills = 0;
+	this->ReplenishHealthPrice = 10;
+	this->ReplenishStaminahPrice = 5;
 }
 
 void AMech_CombatGameMode::StartPlay() {
 	Super::StartPlay();
 
-	this->WaveNumber ++;
+	this->WaveNumber++;
 	GetWorldTimerManager().SetTimer(SecondIncreaseTimer, this, &AMech_CombatGameMode::IncreaseTimer, 1.0f, true);
 }
 

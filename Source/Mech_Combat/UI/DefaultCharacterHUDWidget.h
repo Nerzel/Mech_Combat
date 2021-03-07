@@ -14,12 +14,6 @@ class MECH_COMBAT_API UDefaultCharacterHUDWidget : public UUserWidget {
 
     GENERATED_BODY()
 
-private:
-    AMech_CombatCharacter* Character;
-    AMech_CombatGameMode* GameMode;
-    FNumberFormattingOptions FormatingOptions;
-    TMap<FString, UTexture2D*>* IconMap;
-
 public:
     UDefaultCharacterHUDWidget(const FObjectInitializer& ObjectInitializer);
     virtual void NativeConstruct() override;
@@ -46,6 +40,15 @@ public:
     UTextBlock* WaveNumber;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
     UTextBlock* NumberOfEnemies;
+
+
+private:
+    UPROPERTY(VisibleInstanceOnly)
+    AMech_CombatCharacter* Character;
+    UPROPERTY(VisibleInstanceOnly)
+    AMech_CombatGameMode* GameMode;
+    FNumberFormattingOptions FormatingOptions;
+    TMap<FString, UTexture2D*>* IconMap;
 
 private:
     void SetHUDIcon(UImage* ImageWidget, const int LimitValue, const FString IconName);
