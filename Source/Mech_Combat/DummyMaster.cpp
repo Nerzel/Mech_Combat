@@ -78,7 +78,7 @@ void ADummyMaster::OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, cla
 
 			switch (Character->DamageType) {
 				case 1:
-					this->Health -= Cast<AHammerWeapon>(OtherActor)->BaseDamage + 0.2f;
+					this->Health -= Cast<AHammerWeapon>(OtherActor)->BaseDamage + this->PlayerCharacter->NormalDamage;
 					if (Character->AttackEnergy < 12) {
 						Character->AttackEnergy++;
 					}

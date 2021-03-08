@@ -39,6 +39,10 @@ void UShopMenuWidget::NativeConstruct() {
 		this->UpgradeSpeed->OnClicked.AddDynamic(this, &UShopMenuWidget::OnUpgradeSpeedClick);
 	}
 
+	if (this->UpgradeDamage) {
+		this->UpgradeDamage->OnClicked.AddDynamic(this, &UShopMenuWidget::OnUpgradeDamageClick);
+	}
+
 	if (this->ReplenishHealthCost) {
 		this->ReplenishHealthCost->SetText(FText::AsNumber(this->GameMode->ReplenishHealthCost, &this->FormatingOptions2Ints));
 	}
@@ -75,6 +79,10 @@ void UShopMenuWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 		this->MaxSpeed->SetText(FText::AsPercent(static_cast<float>(this->Character->MovementSpeed) / static_cast<float>(this->Character->DefaultMovementSpeed)));
 	}
 
+	if (this->CurrentDamage) {
+		this->CurrentDamage->SetText(FText::AsNumber(this->Character->NormalDamage * 100));
+	}
+
 	if (this->HealthUpgradeCost) {
 		this->HealthUpgradeCost->SetText(FText::AsNumber(this->GameMode->HealthUpgradeCost, &this->FormatingOptions2Ints));
 	}
@@ -85,6 +93,10 @@ void UShopMenuWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 
 	if (this->SpeedUpgradeCost) {
 		this->SpeedUpgradeCost->SetText(FText::AsNumber(this->GameMode->SpeedUpgradeCost, &this->FormatingOptions2Ints));
+	}
+
+	if (this->DamageUpgradeCost) {
+		this->DamageUpgradeCost->SetText(FText::AsNumber(this->GameMode->DamageUpgradeCost, &this->FormatingOptions2Ints));
 	}
 }
 
@@ -125,5 +137,13 @@ void UShopMenuWidget::OnUpgradeSpeedClick() {
 		this->Character->GetCharacterMovement()->MaxWalkSpeed = this->Character->MovementSpeed;
 		this->Character->TimeFragments -= this->GameMode->SpeedUpgradeCost;
 		this->GameMode->SpeedUpgradeCost *= 2.5f;
+	}
+}
+
+void UShopMenuWidget::OnUpgradeDamageClick() {
+	if (this->Character->TimeFragments >= this->GameMode->DamageUpgradeCost) {
+		this->Character->NormalDamage += 0.1f;
+		this->Character->TimeFragments -= this->GameMode->SpeedUpgradeCost;
+		this->GameMode->DamageUpgradeCost *= 2;
 	}
 }

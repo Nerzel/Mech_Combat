@@ -68,7 +68,7 @@ AMech_CombatCharacter::AMech_CombatCharacter() {
 	this->TimeFragments = 50;
 	this->bIsAtBench = false;
 	this->bIsShopOpened = false;
-
+	this->NormalDamage = 0.2f;
 }
 
 //////////////////////////////////////////////////////////////////////////

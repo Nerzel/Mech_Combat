@@ -82,6 +82,9 @@ public:
 	float Stamina;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	float NormalDamage;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	int AttackEnergy;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)

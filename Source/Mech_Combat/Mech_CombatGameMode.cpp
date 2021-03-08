@@ -21,6 +21,7 @@ AMech_CombatGameMode::AMech_CombatGameMode() {
 	this->HealthUpgradeCost = 5;
 	this->StaminaUpgradeCost = 5;
 	this->SpeedUpgradeCost = 10;
+	this->DamageUpgradeCost = 5;
 }
 
 void AMech_CombatGameMode::StartPlay() {

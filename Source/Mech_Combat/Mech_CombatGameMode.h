@@ -23,6 +23,7 @@ public:
 	int HealthUpgradeCost;
 	int StaminaUpgradeCost;
 	int SpeedUpgradeCost;
+	int DamageUpgradeCost;
 
 private:
 	FTimerHandle SecondIncreaseTimer;
