@@ -64,7 +64,19 @@ public:
 	int DamageType;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	float MaxHealth;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	float Health;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	float MaxStamina;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	int DefaultMovementSpeed;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	int MovementSpeed;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	float Stamina;
@@ -178,6 +190,7 @@ public:
 	UDefaultCharacterHUDWidget* GetCharacterHUDWidget();
 	UShopMenuWidget* GetShopMenHUDWidget();
 	void ToggleShopMenu();
+	void AutoIncreaseStamina();
 
 };
 

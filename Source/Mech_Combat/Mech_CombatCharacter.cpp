@@ -57,13 +57,18 @@ AMech_CombatCharacter::AMech_CombatCharacter() {
 	this->bIsHelicopterActive = false;
 	this->bIsLeapctive = false;
 	this->PlayAttackAnimation = false;
-	this->Health = 1.0f;
-	this->Stamina = 1.0f;
+	this->MaxHealth = 1.f;
+	this->Health = this->MaxHealth;
+	this->MaxStamina = 1.f;
+	this->Stamina = this->MaxStamina;
+	this->DefaultMovementSpeed = 600;
+	this->MovementSpeed= this->DefaultMovementSpeed;
 	this->AttackEnergy = 12;
 	this->DamageType = 0;
-	this->TimeFragments = 0;
+	this->TimeFragments = 50;
 	this->bIsAtBench = false;
 	this->bIsShopOpened = false;
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -225,7 +230,7 @@ UShopMenuWidget* AMech_CombatCharacter::GetShopMenHUDWidget() {
 void AMech_CombatCharacter::StartSprinting() {
 	if (this->Stamina > 0.0f) {
 		this->bIsSprinting = true;
-		GetCharacterMovement()->MaxWalkSpeed *= 2.0f;
+		GetCharacterMovement()->MaxWalkSpeed = this->MovementSpeed * 2;
 		GetWorldTimerManager().SetTimer(EnergyDecreaseTimer, this, &AMech_CombatCharacter::DecreaseStaminaWhileSprinting, 1.0f, true);
 	}
 	if (EnergyIncreaseTimer.IsValid()) {
@@ -236,10 +241,10 @@ void AMech_CombatCharacter::StartSprinting() {
 void AMech_CombatCharacter::StopSprinting(const bool bRefillStamina) {
 	if (this->bIsSprinting) {
 		this->bIsSprinting = false;
-		GetCharacterMovement()->MaxWalkSpeed /= 2.0f;
+		GetCharacterMovement()->MaxWalkSpeed =  this->MovementSpeed;
 		GetWorldTimerManager().ClearTimer(EnergyDecreaseTimer);
 	}
-	if (this->Stamina < 1.0f && bRefillStamina) {
+	if (this->Stamina < this->MaxStamina && bRefillStamina) {
 		GetWorldTimerManager().SetTimer(EnergyIncreaseTimer, this, &AMech_CombatCharacter::IncreaseStaminaAfterSprinting, 1.0f, true);
 	}
 }
@@ -252,10 +257,16 @@ void AMech_CombatCharacter::DecreaseStaminaWhileSprinting() {
 }
 
 void AMech_CombatCharacter::IncreaseStaminaAfterSprinting() {
-	if (this->Stamina < 1.0f) {
+	if (this->Stamina < this->MaxStamina) {
 		this->Stamina += 0.05f;
 	} else {
 		GetWorldTimerManager().ClearTimer(EnergyIncreaseTimer);
+	}
+}
+
+void AMech_CombatCharacter::AutoIncreaseStamina() {
+	if (!this->EnergyIncreaseTimer.IsValid()) {
+		GetWorldTimerManager().SetTimer(EnergyIncreaseTimer, this, &AMech_CombatCharacter::IncreaseStaminaAfterSprinting, 1.0f, true);
 	}
 }
 

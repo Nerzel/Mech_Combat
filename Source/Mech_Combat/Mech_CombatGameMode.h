@@ -18,8 +18,11 @@ public:
 	int NumberOfBots;
 	int MaxBots;
 	int NumberOfKills;
-	int ReplenishHealthPrice;
-	int ReplenishStaminahPrice;
+	int ReplenishHealthCost;
+	int ReplenishStaminahCost;
+	int HealthUpgradeCost;
+	int StaminaUpgradeCost;
+	int SpeedUpgradeCost;
 
 private:
 	FTimerHandle SecondIncreaseTimer;

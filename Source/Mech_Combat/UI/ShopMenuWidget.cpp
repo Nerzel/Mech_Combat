@@ -3,6 +3,8 @@
 
 #include "ShopMenuWidget.h"
 
+
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Mech_Combat/Mech_CombatCharacter.h"
 
@@ -16,17 +18,33 @@ void UShopMenuWidget::NativeConstruct() {
 	this->GameMode = (AMech_CombatGameMode*)GetWorld()->GetAuthGameMode();
 	this->FormatingOptions2Ints.MinimumIntegralDigits = 2;
 	this->FormatingOptions3Ints.MinimumIntegralDigits = 3;
+
 	if (this->ReplenishHealth) {
 		this->ReplenishHealth->OnClicked.AddDynamic(this, &UShopMenuWidget::OnReplishHealthClick);
 	}
+
 	if (this->ReplenishStamina) {
 		this->ReplenishStamina->OnClicked.AddDynamic(this, &UShopMenuWidget::OnReplishStaminaClick);
 	}
-	if (this->ReplenishHealthPrice) {
-		this->ReplenishHealthPrice->SetText(FText::AsNumber(this->GameMode->ReplenishHealthPrice, &this->FormatingOptions2Ints));
+
+	if (this->UpgradeMaxHealth) {
+		this->UpgradeMaxHealth->OnClicked.AddDynamic(this, &UShopMenuWidget::OnUpgradeHealthClick);
 	}
-	if (this->ReplenishStaminaPrice) {
-		this->ReplenishStaminaPrice->SetText(FText::AsNumber(this->GameMode->ReplenishStaminahPrice, &this->FormatingOptions2Ints));
+
+	if (this->UpgradeMaxHealth) {
+		this->UpgradeMaxHealth->OnClicked.AddDynamic(this, &UShopMenuWidget::OnUpgradeHealthClick);
+	}
+
+	if (this->UpgradeSpeed) {
+		this->UpgradeSpeed->OnClicked.AddDynamic(this, &UShopMenuWidget::OnUpgradeSpeedClick);
+	}
+
+	if (this->ReplenishHealthCost) {
+		this->ReplenishHealthCost->SetText(FText::AsNumber(this->GameMode->ReplenishHealthCost, &this->FormatingOptions2Ints));
+	}
+
+	if (this->ReplenishStaminaCost) {
+		this->ReplenishStaminaCost->SetText(FText::AsNumber(this->GameMode->ReplenishStaminahCost, &this->FormatingOptions2Ints));
 	}
 }
 
@@ -44,18 +62,68 @@ void UShopMenuWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	if (this->StaminaBar) {
 		this->StaminaBar->SetPercent(Character->Stamina);
 	}
+
+	if (this->MaxHealth) {
+		this->MaxHealth->SetText(FText::AsPercent(this->Character->MaxHealth));
+	}
+
+	if (this->MaxStamina) {
+		this->MaxStamina->SetText(FText::AsPercent(this->Character->MaxStamina));
+	}
+
+	if (this->MaxSpeed) {
+		this->MaxSpeed->SetText(FText::AsPercent(static_cast<float>(this->Character->MovementSpeed) / static_cast<float>(this->Character->DefaultMovementSpeed)));
+	}
+
+	if (this->HealthUpgradeCost) {
+		this->HealthUpgradeCost->SetText(FText::AsNumber(this->GameMode->HealthUpgradeCost, &this->FormatingOptions2Ints));
+	}
+
+	if (this->StaminaUpgradeCost) {
+		this->StaminaUpgradeCost->SetText(FText::AsNumber(this->GameMode->StaminaUpgradeCost, &this->FormatingOptions2Ints));
+	}
+
+	if (this->SpeedUpgradeCost) {
+		this->SpeedUpgradeCost->SetText(FText::AsNumber(this->GameMode->SpeedUpgradeCost, &this->FormatingOptions2Ints));
+	}
 }
 
 void UShopMenuWidget::OnReplishHealthClick() {
-	if (this->Character->TimeFragments >= this->GameMode->ReplenishHealthPrice && this->Character->Health < 1.f) {
-		this->Character->Health = 1.0;
-		this->Character->TimeFragments -= this->GameMode->ReplenishHealthPrice;
+	if (this->Character->TimeFragments >= this->GameMode->ReplenishHealthCost && this->Character->Health < 1.f) {
+		this->Character->Health = this->Character->MaxHealth;
+		this->Character->TimeFragments -= this->GameMode->ReplenishHealthCost;
 	}
 }
 
 void UShopMenuWidget::OnReplishStaminaClick() {
-	if (this->Character->TimeFragments >= this->GameMode->ReplenishStaminahPrice && this->Character->Stamina < 1.f) {
-		this->Character->Stamina = 1.0;
-		this->Character->TimeFragments -= this->GameMode->ReplenishStaminahPrice;
+	if (this->Character->TimeFragments >= this->GameMode->ReplenishStaminahCost && this->Character->Stamina < 1.f) {
+		this->Character->Stamina = this->Character->MaxStamina;
+		this->Character->TimeFragments -= this->GameMode->ReplenishStaminahCost;
+	}
+}
+
+void UShopMenuWidget::OnUpgradeHealthClick() {
+	if (this->Character->TimeFragments >= this->GameMode->HealthUpgradeCost) {
+		this->Character->MaxHealth *= 1.2f;
+		this->Character->TimeFragments -= this->GameMode->HealthUpgradeCost;
+		this->GameMode->HealthUpgradeCost *= 2;
+	}
+}
+
+void UShopMenuWidget::OnUpgradeStaminaClick() {
+	if (this->Character->TimeFragments >= this->GameMode->StaminaUpgradeCost) {
+		this->Character->MaxStamina *= 1.2f;
+		this->Character->TimeFragments -= this->GameMode->StaminaUpgradeCost;
+		this->GameMode->StaminaUpgradeCost *= 2;
+		this->Character->AutoIncreaseStamina();
+	}
+}
+
+void UShopMenuWidget::OnUpgradeSpeedClick() {
+	if (this->Character->TimeFragments >= this->GameMode->SpeedUpgradeCost) {
+		this->Character->MovementSpeed += 200;
+		this->Character->GetCharacterMovement()->MaxWalkSpeed = this->Character->MovementSpeed;
+		this->Character->TimeFragments -= this->GameMode->SpeedUpgradeCost;
+		this->GameMode->SpeedUpgradeCost *= 2.5f;
 	}
 }

@@ -16,8 +16,11 @@ AMech_CombatGameMode::AMech_CombatGameMode() {
 	this->NumberOfBots = 0;
 	this->MaxBots = 5;
 	this->NumberOfKills = 0;
-	this->ReplenishHealthPrice = 10;
-	this->ReplenishStaminahPrice = 5;
+	this->ReplenishHealthCost = 10;
+	this->ReplenishStaminahCost = 5;
+	this->HealthUpgradeCost = 5;
+	this->StaminaUpgradeCost = 5;
+	this->SpeedUpgradeCost = 10;
 }
 
 void AMech_CombatGameMode::StartPlay() {

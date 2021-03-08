@@ -38,15 +38,15 @@ void UDefaultCharacterHUDWidget::NativeTick(const FGeometry& MyGeometry, float I
     Super::NativeTick(MyGeometry, InDeltaTime);
 
     if (this->HealthBar) {
-        this->HealthBar->SetPercent(Character->Health);
+        this->HealthBar->SetPercent(this->Character->Health / this->Character->MaxHealth);
     }
 
     if (this->StaminaBar) {
-        this->StaminaBar->SetPercent(Character->Stamina);
+        this->StaminaBar->SetPercent(this->Character->Stamina / this->Character->MaxStamina);
     }
 
     if (this->AttackEnergyBar) {
-        this->AttackEnergyBar->SetPercent(Character->AttackEnergy / 12.0f);
+        this->AttackEnergyBar->SetPercent(this->Character->AttackEnergy / 12.0f);
     }
 
     if (this->MinuteTextBlock && this->SecondTextBlock) {
