@@ -84,13 +84,13 @@ void ADummyMaster::OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, cla
 					}
 					break;
 				case 2:
-					this->Health -= Cast<AHammerWeapon>(OtherActor)->BaseDamage + 0.1f;
+					this->Health -= Cast<AHammerWeapon>(OtherActor)->BaseDamage + this->PlayerCharacter->WhirlwindDamage;
 					break;
 				case 3:
-					this->Health -= Cast<AHammerWeapon>(OtherActor)->BaseDamage + 0.2f;
+					this->Health -= Cast<AHammerWeapon>(OtherActor)->BaseDamage + this->PlayerCharacter->HelicopterDamage;
 					break;
 				case 4:
-					this->Health -= Cast<AHammerWeapon>(OtherActor)->BaseDamage + 0.4f;
+					this->Health -= Cast<AHammerWeapon>(OtherActor)->BaseDamage + this->PlayerCharacter->LeapDamage;
 					break;
 				default:
 					break;

@@ -69,6 +69,9 @@ AMech_CombatCharacter::AMech_CombatCharacter() {
 	this->bIsAtBench = false;
 	this->bIsShopOpened = false;
 	this->NormalDamage = 0.2f;
+	this->WhirlwindDamage = 0.1f;
+	this->HelicopterDamage = 0.2f;
+	this->LeapDamage = 0.4f;
 }
 
 //////////////////////////////////////////////////////////////////////////

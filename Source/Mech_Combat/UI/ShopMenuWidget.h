@@ -39,6 +39,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UTextBlock* DamageUpgradeCost;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* WhirlwindUpgradeCost;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* HelicopterUpgradeCost;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* LeapUpgradeCost;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UTextBlock* MaxHealth;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UTextBlock* MaxStamina;
@@ -46,6 +52,12 @@ public:
 	UTextBlock* MaxSpeed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UTextBlock* CurrentDamage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* CurrentWhirlwindDamage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* CurrentHelicopterDamage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* CurrentLeapDamage;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* ReplenishHealth;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -58,6 +70,12 @@ public:
 	UButton* UpgradeSpeed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* UpgradeDamage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UButton* UpgradeWhirlwind;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UButton* UpgradeHelicopter;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UButton* UpgradeLeap;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UProgressBar* HealthBar;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -84,5 +102,11 @@ public:
     void OnUpgradeSpeedClick();
 	UFUNCTION()
     void OnUpgradeDamageClick();
+	UFUNCTION()
+    void OnUpgradeWhirlwindClick();
+	UFUNCTION()
+    void OnUpgradeHelicopterClick();
+	UFUNCTION()
+    void OnUpgradeLeapClick();
 
 };

@@ -22,6 +22,9 @@ AMech_CombatGameMode::AMech_CombatGameMode() {
 	this->StaminaUpgradeCost = 5;
 	this->SpeedUpgradeCost = 10;
 	this->DamageUpgradeCost = 5;
+	this->WhirlwindUpgradeCost = 7;
+	this->HelicopterUpgradeCost = 7;
+	this->LeapUpgradeCost = 7;
 }
 
 void AMech_CombatGameMode::StartPlay() {

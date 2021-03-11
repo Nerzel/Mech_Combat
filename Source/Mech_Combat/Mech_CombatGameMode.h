@@ -24,6 +24,9 @@ public:
 	int StaminaUpgradeCost;
 	int SpeedUpgradeCost;
 	int DamageUpgradeCost;
+	int WhirlwindUpgradeCost;
+	int HelicopterUpgradeCost;
+	int LeapUpgradeCost;
 
 private:
 	FTimerHandle SecondIncreaseTimer;

@@ -85,6 +85,15 @@ public:
 	float NormalDamage;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	float WhirlwindDamage;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+	float HelicopterDamage;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
+    float LeapDamage;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
 	int AttackEnergy;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character)
