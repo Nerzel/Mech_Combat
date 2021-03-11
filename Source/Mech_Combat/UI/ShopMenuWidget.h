@@ -21,9 +21,6 @@ class MECH_COMBAT_API UShopMenuWidget : public UUserWidget {
 	GENERATED_BODY()
 
 public:
-	UShopMenuWidget(const FObjectInitializer& ObjectInitializer);
-	virtual void NativeConstruct() override;
-	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UTextBlock* CurrentTimeFragments;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -90,6 +87,9 @@ private:
 	FNumberFormattingOptions FormatingOptions3Ints;
 
 public:
+	UShopMenuWidget(const FObjectInitializer& ObjectInitializer);
+	virtual void NativeConstruct() override;
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	UFUNCTION()
 	void OnReplishHealthClick();
 	UFUNCTION()

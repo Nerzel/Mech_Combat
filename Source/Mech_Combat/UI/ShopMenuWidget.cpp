@@ -31,10 +31,6 @@ void UShopMenuWidget::NativeConstruct() {
 		this->UpgradeMaxHealth->OnClicked.AddDynamic(this, &UShopMenuWidget::OnUpgradeHealthClick);
 	}
 
-	if (this->UpgradeMaxHealth) {
-		this->UpgradeMaxHealth->OnClicked.AddDynamic(this, &UShopMenuWidget::OnUpgradeHealthClick);
-	}
-
 	if (this->UpgradeSpeed) {
 		this->UpgradeSpeed->OnClicked.AddDynamic(this, &UShopMenuWidget::OnUpgradeSpeedClick);
 	}
