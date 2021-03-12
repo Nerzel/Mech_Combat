@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "UI/NewWaveWidget.h"
+
 #include "Mech_CombatGameMode.generated.h"
 
 UCLASS(minimalapi)
@@ -27,14 +29,20 @@ public:
 	int WhirlwindUpgradeCost;
 	int HelicopterUpgradeCost;
 	int LeapUpgradeCost;
+	UPROPERTY(EditDefaultsOnly, Category=HUD)
+	TSubclassOf<UNewWaveWidget> DefaultNewWaveWidgetClass;
 
 private:
 	FTimerHandle SecondIncreaseTimer;
+	FTimerHandle NewWaveWidgetTimer;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
+	UNewWaveWidget* NewWaveWidget;
 
 public:
 	AMech_CombatGameMode();
 	virtual void StartPlay();
 	void IncreaseTimer();
+	void TriggerNextWave();
 
 };
 

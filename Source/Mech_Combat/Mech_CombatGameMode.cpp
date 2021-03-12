@@ -10,6 +10,11 @@ AMech_CombatGameMode::AMech_CombatGameMode() {
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
 
+	static ConstructorHelpers::FClassFinder<UNewWaveWidget> NewWaveWidgetBPClass(TEXT("/Game/MechCombat/Blueprints/UI/NewWaveWidget"));
+	if (NewWaveWidgetBPClass.Class != NULL) {
+		DefaultNewWaveWidgetClass = NewWaveWidgetBPClass.Class;
+	}
+
 	this->RemainingMinutes = 0;
 	this->RemainingSeconds = 0;
 	this->WaveNumber = 0;
@@ -30,7 +35,8 @@ AMech_CombatGameMode::AMech_CombatGameMode() {
 void AMech_CombatGameMode::StartPlay() {
 	Super::StartPlay();
 
-	this->WaveNumber++;
+	this->TriggerNextWave();
+
 	GetWorldTimerManager().SetTimer(SecondIncreaseTimer, this, &AMech_CombatGameMode::IncreaseTimer, 1.0f, true);
 }
 
@@ -40,5 +46,19 @@ void AMech_CombatGameMode::IncreaseTimer() {
 		this->RemainingMinutes++;
 	} else {
 		this->RemainingSeconds++;
+	}
+}
+
+void AMech_CombatGameMode::TriggerNextWave() {
+	this->WaveNumber++;
+	if (this->DefaultNewWaveWidgetClass) {
+		FTimerDelegate Delegate;
+
+		this->NewWaveWidget = CreateWidget<UNewWaveWidget>(GetWorld(), this->DefaultNewWaveWidgetClass, FName(TEXT("NewWaveWidget")));
+		this->NewWaveWidget->SetCurrentWaveNumberText(this->WaveNumber);
+		this->NewWaveWidget->AddToViewport();
+
+		Delegate.BindLambda([this] { this->NewWaveWidget->RemoveFromViewport(); });
+		GetWorldTimerManager().SetTimer(NewWaveWidgetTimer, Delegate, 2.0f, false);
 	}
 }

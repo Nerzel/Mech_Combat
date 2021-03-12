@@ -53,10 +53,10 @@ void ALevel1ScriptActor::SpawnBotByClass() {
 
 void ALevel1ScriptActor::CheckNewWave() {
 
-	if (this->GameMode->NumberOfBots == 0) {
+	if (this->GameMode->NumberOfKills == this->GameMode->MaxBots) {
 		GetWorld()->GetTimerManager().ClearTimer(this->NewWaveCheckTimer);
 		this->GameMode->NumberOfKills = 0;
-		this->GameMode->WaveNumber++;
+		this->GameMode->TriggerNextWave();
 		SpawnBots();
 	}
 
