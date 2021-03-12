@@ -12,7 +12,9 @@
 				"Engine",
 				"UMG",
 				"AIModule",
-				"NavigationSystem"
+				"NavigationSystem",
+				"LevelSequence",
+				"MovieScene"
 			]
 		}
 	],

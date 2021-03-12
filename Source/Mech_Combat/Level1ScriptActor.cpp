@@ -4,16 +4,6 @@
 #include "Level1ScriptActor.h"
 
 ALevel1ScriptActor::ALevel1ScriptActor() {
-	static ConstructorHelpers::FClassFinder<ASpiderBomb> SpiderBombBPClass(TEXT("/Game/MechCombat/Blueprints/SpiderBomb_BP"));
-	if (SpiderBombBPClass.Class != NULL) {
-		DefaultSpiderBombClass = SpiderBombBPClass.Class;
-	}
-
-	static ConstructorHelpers::FClassFinder<ASpiderTurret> SpiderTurretBPClass(TEXT("/Game/MechCombat/Blueprints/SpiderTurret_BP"));
-	if (SpiderTurretBPClass.Class != NULL) {
-		DefaultSpiderTurretClass = SpiderTurretBPClass.Class;
-	}
-
 	this->EnnemyTypeFlag = true;
 }
 
@@ -21,6 +11,17 @@ void ALevel1ScriptActor::BeginPlay() {
 	Super::BeginPlay();
 
 	this->GameMode = Cast<AMech_CombatGameMode>(GetWorld()->GetAuthGameMode());
+
+	if (this->DoorsTriggerBox) {
+		this->DoorsTriggerBox->OnActorBeginOverlap.AddDynamic(this, &ALevel1ScriptActor::OnDoorsTriggerBoxBeginOverlap);
+		this->DoorsTriggerBox->OnActorEndOverlap.AddDynamic(this, &ALevel1ScriptActor::OnDoorsTriggerBoxEndOverlap);
+	}
+
+	if (this->DoorsLevelSequence) {
+		ALevelSequenceActor* SequenceActor;
+		this->DoorsSequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), this->DoorsLevelSequence, FMovieSceneSequencePlaybackSettings(), SequenceActor);
+	}
+
 	SpawnBots();
 }
 
@@ -60,4 +61,16 @@ void ALevel1ScriptActor::CheckNewWave() {
 		SpawnBots();
 	}
 
+}
+
+void ALevel1ScriptActor::OnDoorsTriggerBoxBeginOverlap(AActor* OverlappedActor, AActor* OtherActor) {
+	if (OtherActor->IsA<AMech_CombatCharacter>() && this->DoorsSequencePlayer) {
+		this->DoorsSequencePlayer->Play();
+	}
+}
+
+void ALevel1ScriptActor::OnDoorsTriggerBoxEndOverlap(AActor* OverlappedActor, AActor* OtherActor) {
+	if (OtherActor->IsA<AMech_CombatCharacter>() && this->DoorsSequencePlayer) {
+		this->DoorsSequencePlayer->PlayReverse();
+	}
 }
