@@ -17,7 +17,7 @@ class MECH_COMBAT_API ASpiderTurret : public ADummyMaster {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Classes)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Classes)
 	TSubclassOf<AProjectile> DefaultProjectileClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsShooting;

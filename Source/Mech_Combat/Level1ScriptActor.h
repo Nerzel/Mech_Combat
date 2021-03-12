@@ -24,11 +24,11 @@ class MECH_COMBAT_API ALevel1ScriptActor : public ALevelScriptActor {
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	AMech_CombatGameMode* GameMode;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Classes)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Classes)
 	TSubclassOf<ASpiderBomb> DefaultSpiderBombClass;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Classes)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Classes)
 	TSubclassOf<ASpiderTurret> DefaultSpiderTurretClass;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Sequences)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Sequences)
 	ULevelSequence* DoorsLevelSequence;
 
 private:

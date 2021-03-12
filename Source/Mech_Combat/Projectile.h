@@ -20,11 +20,11 @@ public:
 	UProjectileMovementComponent* ProjectileMovementComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float LifeTime;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UParticleSystem* ExplosionParticle;
 
 private:
 	FTimerHandle DestroyTimer;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
-	UParticleSystem* ExplosionParticle;
 
 public:	
 	// Sets default values for this actor's properties

@@ -29,14 +29,14 @@ public:
 	int WhirlwindUpgradeCost;
 	int HelicopterUpgradeCost;
 	int LeapUpgradeCost;
-	UPROPERTY(EditDefaultsOnly, Category=HUD)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=HUD)
 	TSubclassOf<UNewWaveWidget> DefaultNewWaveWidgetClass;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UNewWaveWidget* NewWaveWidget;
 
 private:
 	FTimerHandle SecondIncreaseTimer;
 	FTimerHandle NewWaveWidgetTimer;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
-	UNewWaveWidget* NewWaveWidget;
 
 public:
 	AMech_CombatGameMode();

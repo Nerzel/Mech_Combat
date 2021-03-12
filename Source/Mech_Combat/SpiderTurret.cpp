@@ -9,12 +9,6 @@
 ASpiderTurret::ASpiderTurret() {
 	this->CarriedTurretMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CarriedTurretbMesh"));
 	this->CarriedTurretMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName(TEXT("Core")));
-
-	static ConstructorHelpers::FClassFinder<AProjectile> ProjectileBPClass(TEXT("/Game/MechCombat/Blueprints/Projectile_BP"));
-	if (ProjectileBPClass.Class != NULL) {
-		this->DefaultProjectileClass = ProjectileBPClass.Class;
-	}
-
 	this->bIsShooting = false;
 	this->ShootRate = 0.4f;
 	this->ShootRange = 1500.f;

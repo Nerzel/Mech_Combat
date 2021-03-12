@@ -19,11 +19,6 @@ AProjectile::AProjectile() {
 	this->ProjectileMovementComponent->MaxSpeed = 5000.f,
 	this->ProjectileMovementComponent->Velocity = FVector(5000.f, 1.f, 1.f);
 
-	static ConstructorHelpers::FObjectFinder<UParticleSystem> ExplosionParticleAsset(TEXT("/Game/StarterContent/Particles/P_Explosion.P_Explosion"));
-	if (ExplosionParticleAsset.Object != NULL) {
-		this->ExplosionParticle = ExplosionParticleAsset.Object;
-	}
-
 	PrimaryActorTick.bCanEverTick = false;
 	this->LifeTime = 2.5f;
 }

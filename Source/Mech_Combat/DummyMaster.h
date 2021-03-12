@@ -18,7 +18,7 @@ class ADummyMaster : public ACharacter {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Classes)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Classes)
 	TSubclassOf<ATimeFragment> DefaultCollectableClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float Health;
@@ -26,10 +26,10 @@ public:
 	bool bIsChasing;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float RoamingRadius;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UParticleSystem* ExplosionParticle;
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
-	UParticleSystem* ExplosionParticle;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"), Category = AI)
 	UPawnSensingComponent* PawnSensing;
 	UPROPERTY(VisibleInstanceOnly)

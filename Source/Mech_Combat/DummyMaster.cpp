@@ -17,15 +17,6 @@
 ADummyMaster::ADummyMaster() {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(120.f, 140.0f);
-	static ConstructorHelpers::FObjectFinder<UParticleSystem> ExplosionParticleAsset(TEXT("/Game/StarterContent/Particles/P_Explosion.P_Explosion"));
-	if (ExplosionParticleAsset.Object != NULL) {
-		this->ExplosionParticle = ExplosionParticleAsset.Object;
-	}
-
-	static ConstructorHelpers::FClassFinder<ATimeFragment> TimeFragmentBPClass(TEXT("/Game/MechCombat/Blueprints/TimeFragment_BP"));
-	if (TimeFragmentBPClass.Class != NULL) {
-		DefaultCollectableClass = TimeFragmentBPClass.Class;
-	}
 	this->PawnSensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing"));
 	this->PawnSensing->SetPeripheralVisionAngle(60.f);
 	this->PawnSensing->SightRadius = 6000.f;
