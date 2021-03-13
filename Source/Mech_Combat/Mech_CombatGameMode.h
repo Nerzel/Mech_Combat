@@ -40,7 +40,7 @@ private:
 
 public:
 	AMech_CombatGameMode();
-	virtual void StartPlay();
+	virtual void StartPlay() override;
 	void IncreaseTimer();
 	void TriggerNextWave();
 
