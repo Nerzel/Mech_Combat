@@ -14,8 +14,8 @@ class MECH_COMBAT_API ASpawner : public AActor {
 
 	GENERATED_BODY()
 
-public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+private:
+	UPROPERTY(VisibleInstanceOnly)
 	AMech_CombatGameMode* GameMode;
 
 public:	
