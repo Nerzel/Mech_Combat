@@ -10,7 +10,7 @@ AMech_CombatGameMode::AMech_CombatGameMode() {
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
 
-	static ConstructorHelpers::FClassFinder<UNewWaveWidget> NewWaveWidgetBPClass(TEXT("/Game/MechCombat/Blueprints/UI/NewWaveWidget"));
+	static ConstructorHelpers::FClassFinder<UNewWaveWidget> NewWaveWidgetBPClass(TEXT("/Game/MechCombat/Blueprints/UI/NewWaveWidget_BP"));
 	if (NewWaveWidgetBPClass.Class != NULL) {
 		DefaultNewWaveWidgetClass = NewWaveWidgetBPClass.Class;
 	}
