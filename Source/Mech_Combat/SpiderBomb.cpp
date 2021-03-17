@@ -41,6 +41,10 @@ void ASpiderBomb::ExplodeAndDestroy() {
     }
     if (this->bIsPlayerInRadius) {
         PlayerCharacter->Health -= 0.3f;
+
+        if (PlayerCharacter->Health <= 0.f) {
+            PlayerCharacter->Death();
+        }
     }
 
     Cast<AMech_CombatGameMode>(GetWorld()->GetAuthGameMode())->NumberOfBots--;

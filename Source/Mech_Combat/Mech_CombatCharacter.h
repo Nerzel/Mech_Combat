@@ -112,7 +112,10 @@ public:
 	TSubclassOf<UShopMenuWidget> DefaultShopMenuClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Weapon)
-	TSubclassOf<AHammerWeapon> HammerWeaponBP;
+	TSubclassOf<AHammerWeapon> DefaultHammerWeaponClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UParticleSystem* ExplosionParticle;
 
 private:
 	bool PlayAttackAnimation;
@@ -120,6 +123,9 @@ private:
 	FTimerHandle EnergyDecreaseTimer;
 	FTimerHandle EnergyIncreaseTimer;
 	FTimerHandle LeapTimer;
+	FTimerHandle DeathTimer;
+	UPROPERTY(VisibleInstanceOnly)
+	AHammerWeapon* HammerWeapon;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	UDefaultCharacterHUDWidget* CharacterHUDWidget;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
@@ -203,6 +209,11 @@ public:
 	UShopMenuWidget* GetShopMenHUDWidget();
 	void ToggleShopMenu();
 	void AutoIncreaseStamina();
+	void Death();
+
+private:
+	UFUNCTION()
+	void GameOver();
 
 };
 

@@ -210,7 +210,8 @@ void AMech_CombatCharacter::BeginPlay() {
 
 	CharacterMesh = GetMesh();
 	HammerSocketTransform = CharacterMesh->GetSocketTransform(FName(TEXT("HammerSocket")), RTS_World);
-	GetWorld()->SpawnActor<AHammerWeapon>(this->HammerWeaponBP, HammerSocketTransform)->AttachToComponent(
+	this->HammerWeapon = GetWorld()->SpawnActor<AHammerWeapon>(this->DefaultHammerWeaponClass, HammerSocketTransform);
+	this->HammerWeapon->AttachToComponent(
 		CharacterMesh,
 		FAttachmentTransformRules(
 			EAttachmentRule::SnapToTarget,
@@ -346,3 +347,16 @@ void AMech_CombatCharacter::ToggleShopMenu() {
 
 }
 
+void AMech_CombatCharacter::Death() {
+	UGameplayStatics::SpawnEmitterAtLocation(this, this->ExplosionParticle, GetActorLocation(), FRotator::ZeroRotator, FVector(3.f));
+	GetMesh()->SetVisibility(false);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	this->HammerWeapon->GetMesh()->SetVisibility(false);
+	GetCharacterMovement()->DisableMovement();
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = true;
+	GetWorldTimerManager().SetTimer(this->DeathTimer, this, &AMech_CombatCharacter::GameOver, 1.f, false);
+}
+
+void AMech_CombatCharacter::GameOver() {
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
+}
