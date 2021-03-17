@@ -74,11 +74,16 @@ AMech_CombatCharacter::AMech_CombatCharacter() {
 	this->LeapDamage = 0.4f;
 }
 
+void AMech_CombatCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+	Super::EndPlay(EndPlayReason);
+
+	GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
-void AMech_CombatCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
-{
+void AMech_CombatCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
@@ -114,37 +119,30 @@ void AMech_CombatCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 }
 
 
-void AMech_CombatCharacter::OnResetVR()
-{
+void AMech_CombatCharacter::OnResetVR() {
 	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
 }
 
-void AMech_CombatCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
-{
+void AMech_CombatCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location) {
 		Jump();
 }
 
-void AMech_CombatCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
-{
+void AMech_CombatCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location) {
 		StopJumping();
 }
 
-void AMech_CombatCharacter::TurnAtRate(float Rate)
-{
+void AMech_CombatCharacter::TurnAtRate(float Rate) {
 	// calculate delta for this frame from the rate information
 	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
 }
 
-void AMech_CombatCharacter::LookUpAtRate(float Rate)
-{
+void AMech_CombatCharacter::LookUpAtRate(float Rate) {
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
-void AMech_CombatCharacter::MoveForward(float Value)
-{
-	if ((Controller != NULL) && (Value != 0.0f))
-	{
+void AMech_CombatCharacter::MoveForward(float Value) {
+	if ((Controller != NULL) && (Value != 0.0f)) {
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -155,10 +153,8 @@ void AMech_CombatCharacter::MoveForward(float Value)
 	}
 }
 
-void AMech_CombatCharacter::MoveRight(float Value)
-{
-	if ( (Controller != NULL) && (Value != 0.0f) )
-	{
+void AMech_CombatCharacter::MoveRight(float Value) {
+	if ( (Controller != NULL) && (Value != 0.0f) ) {
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -357,7 +353,7 @@ void AMech_CombatCharacter::Death() {
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	this->HammerWeapon->GetMesh()->SetVisibility(false);
 	GetCharacterMovement()->DisableMovement();
-	GetWorldTimerManager().SetTimer(this->DeathTimer, this, &AMech_CombatCharacter::GameOver, 1.f, false);
+	GetWorldTimerManager().SetTimer(this->GameOverDisplayTimer, this, &AMech_CombatCharacter::GameOver, 1.f, false);
 }
 
 void AMech_CombatCharacter::GameOver() {

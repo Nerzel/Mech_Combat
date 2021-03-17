@@ -28,6 +28,13 @@ void ASpiderBomb::PostInitializeComponents() {
     }
 }
 
+void ASpiderBomb::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+    Super::EndPlay(EndPlayReason);
+
+    GetWorldTimerManager().ClearTimer(this->ExplodeTimer);
+}
+
+
 void ASpiderBomb::ArmAndDestroy() {
     this->bIsArmed = true;
     if (!ExplodeTimer.IsValid()) {

@@ -31,6 +31,13 @@ void AProjectile::PostInitializeComponents() {
 	}
 }
 
+void AProjectile::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+	Super::EndPlay(EndPlayReason);
+
+	GetWorldTimerManager().ClearTimer(this->DestroyTimer);
+}
+
+
 // Called when the game starts or when spawned
 void AProjectile::BeginPlay() {
 	FTimerDelegate Delegate;

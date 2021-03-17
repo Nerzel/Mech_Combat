@@ -9,6 +9,13 @@ ADefaultAIController::ADefaultAIController() {
 
 }
 
+void ADefaultAIController::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+    Super::EndPlay(EndPlayReason);
+
+    GetWorldTimerManager().ClearTimer(this->RoamTimer);
+}
+
+
 void ADefaultAIController::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result) {
     Super::OnMoveCompleted(RequestID, Result);
 

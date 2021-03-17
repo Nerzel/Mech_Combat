@@ -32,6 +32,13 @@ AMech_CombatGameMode::AMech_CombatGameMode() {
 	this->LeapUpgradeCost = 7;
 }
 
+void AMech_CombatGameMode::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+	Super::EndPlay(EndPlayReason);
+
+	GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
+}
+
+
 void AMech_CombatGameMode::StartPlay() {
 	Super::StartPlay();
 

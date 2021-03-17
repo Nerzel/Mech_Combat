@@ -14,6 +14,12 @@ ASpiderTurret::ASpiderTurret() {
 	this->ShootRange = 1500.f;
 }
 
+void ASpiderTurret::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+	Super::EndPlay(EndPlayReason);
+
+	GetWorldTimerManager().ClearTimer(this->ShootingTimer);
+}
+
 void ASpiderTurret::BeginPlay() {
 	Super::BeginPlay();
 }

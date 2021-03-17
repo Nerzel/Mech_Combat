@@ -127,7 +127,7 @@ private:
 	FTimerHandle EnergyDecreaseTimer;
 	FTimerHandle EnergyIncreaseTimer;
 	FTimerHandle LeapTimer;
-	FTimerHandle DeathTimer;
+	FTimerHandle GameOverDisplayTimer;
 	UPROPERTY(VisibleInstanceOnly)
 	AHammerWeapon* HammerWeapon;
 	UPROPERTY(VisibleInstanceOnly)
@@ -220,6 +220,7 @@ public:
 private:
 	UFUNCTION()
 	void GameOver();
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 };
 

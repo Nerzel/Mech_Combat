@@ -7,6 +7,12 @@ ALevel1ScriptActor::ALevel1ScriptActor() {
 	this->EnnemyTypeFlag = true;
 }
 
+void ALevel1ScriptActor::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+	Super::EndPlay(EndPlayReason);
+
+	GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
+}
+
 void ALevel1ScriptActor::BeginPlay() {
 	Super::BeginPlay();
 

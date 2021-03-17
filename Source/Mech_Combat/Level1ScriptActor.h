@@ -54,5 +54,6 @@ private:
 	void OnDoorsTriggerBoxBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
 	UFUNCTION()
 	void OnDoorsTriggerBoxEndOverlap(AActor* OverlappedActor, AActor* OtherActor);
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
 };

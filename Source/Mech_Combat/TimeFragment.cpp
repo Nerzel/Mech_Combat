@@ -15,6 +15,12 @@ ATimeFragment::ATimeFragment() {
 	this->RotatingMovementComponent = CreateOptionalDefaultSubobject<URotatingMovementComponent>(TEXT("RotatingMovement"));
 }
 
+void ATimeFragment::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+	Super::EndPlay(EndPlayReason);
+
+	GetWorldTimerManager().ClearTimer(this->AutoDestroyTimer);
+}
+
 // Called when the game starts or when spawned
 void ATimeFragment::BeginPlay() {
 	FTimerDelegate Delegate;

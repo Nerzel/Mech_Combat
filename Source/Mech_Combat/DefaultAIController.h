@@ -20,5 +20,8 @@ public:
 
 private:
 	FTimerHandle RoamTimer;
+
+private:
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
 };

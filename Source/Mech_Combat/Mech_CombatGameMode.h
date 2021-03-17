@@ -44,5 +44,8 @@ public:
 	void IncreaseTimer();
 	void TriggerNextWave();
 
+private:
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 };
 

@@ -43,4 +43,6 @@ public:
 	UFUNCTION()
 	void OnBombRadiusEndOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
 			class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 };

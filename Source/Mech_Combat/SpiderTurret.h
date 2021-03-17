@@ -36,5 +36,6 @@ public:
 	virtual void BeginPlay() override;
 	void Shoot();
     void OnSeePawn(APawn *OtherPAwn) override;
-	
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 };
