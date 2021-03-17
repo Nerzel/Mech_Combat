@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
+#include "Components/TextBlock.h"
+
 
 #include "GameOverWidget.generated.h"
 
@@ -21,8 +23,15 @@ public:
 	UButton* RestartButton;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* ExitGameButton;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* WaveNumber;
 
 public:
 	UGameOverWidget(const FObjectInitializer& ObjectInitializer);
-	
+	virtual void NativeConstruct() override;
+	void SetWaveNumberText(const int Value);
+	UFUNCTION()
+	void RestartGame();
+	UFUNCTION()
+	void ExitGame();
 };

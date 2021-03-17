@@ -198,8 +198,12 @@ void AMech_CombatCharacter::BeginPlay() {
 	Super::BeginPlay();
 
 	if (this->DefaultCharacterHUDClass) {
-		this->CharacterHUDWidget = CreateWidget<UDefaultCharacterHUDWidget>(GetWorld(), DefaultCharacterHUDClass, FName(TEXT("DefaultCharacterHUD")));
+		this->CharacterHUDWidget = CreateWidget<UDefaultCharacterHUDWidget>(GetWorld(), this->DefaultCharacterHUDClass);
 		this->CharacterHUDWidget->AddToViewport();
+	}
+
+	if (this->DefaultGameOVerWidgetClass) {
+		this->GameOverWidget = CreateWidget<UGameOverWidget>(GetWorld(), this->DefaultGameOVerWidgetClass);
 	}
 
 	if (this->DefaultShopMenuClass) {
@@ -333,14 +337,14 @@ void AMech_CombatCharacter::ToggleShopMenu() {
 		if (this->bIsShopOpened) {
 			this->ShopMenuWidget->SetVisibility(ESlateVisibility::Hidden);
 			GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-			UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = false;
-			UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(FInputModeGameOnly());
+			GetWorld()->GetFirstPlayerController()->bShowMouseCursor = false;
+			GetWorld()->GetFirstPlayerController()->SetInputMode(FInputModeGameOnly());
 			this->bIsShopOpened = false;
 		} else {
 			this->ShopMenuWidget->SetVisibility(ESlateVisibility::Visible);
 			GetCharacterMovement()->DisableMovement();
-			UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = true;
-			UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(FInputModeGameAndUI());
+			GetWorld()->GetFirstPlayerController()->bShowMouseCursor = true;
+			GetWorld()->GetFirstPlayerController()->SetInputMode(FInputModeGameAndUI());
 			this->bIsShopOpened = true;
 		}
 	}
@@ -353,10 +357,18 @@ void AMech_CombatCharacter::Death() {
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	this->HammerWeapon->GetMesh()->SetVisibility(false);
 	GetCharacterMovement()->DisableMovement();
-	UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = true;
 	GetWorldTimerManager().SetTimer(this->DeathTimer, this, &AMech_CombatCharacter::GameOver, 1.f, false);
 }
 
 void AMech_CombatCharacter::GameOver() {
+	AMech_CombatGameMode* GameMode;
+
+	GameMode = (AMech_CombatGameMode*)GetWorld()->GetAuthGameMode();
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
+
+	if (this->GameOverWidget) {
+		this->GameOverWidget->SetWaveNumberText(GameMode->WaveNumber);
+		this->GameOverWidget->AddToViewport();
+		GetWorld()->GetFirstPlayerController()->bShowMouseCursor = true;
+	}
 }

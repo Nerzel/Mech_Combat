@@ -6,6 +6,7 @@
 #include "HammerWeapon.h"
 #include "GameFramework/Character.h"
 #include "UI/DefaultCharacterHUDWidget.h"
+#include "UI/GameOverWidget.h"
 #include "UI/ShopMenuWidget.h"
 
 
@@ -114,6 +115,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Weapon)
 	TSubclassOf<AHammerWeapon> DefaultHammerWeaponClass;
 
+	UPROPERTY(EditDefaultsOnly, Category=HUD)
+	TSubclassOf<UGameOverWidget> DefaultGameOVerWidgetClass;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UParticleSystem* ExplosionParticle;
 
@@ -126,8 +130,10 @@ private:
 	FTimerHandle DeathTimer;
 	UPROPERTY(VisibleInstanceOnly)
 	AHammerWeapon* HammerWeapon;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleInstanceOnly)
 	UDefaultCharacterHUDWidget* CharacterHUDWidget;
+	UPROPERTY(VisibleInstanceOnly)
+	UGameOverWidget* GameOverWidget;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	UShopMenuWidget* ShopMenuWidget;
 
