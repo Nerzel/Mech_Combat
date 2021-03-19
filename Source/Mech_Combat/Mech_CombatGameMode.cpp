@@ -19,7 +19,7 @@ AMech_CombatGameMode::AMech_CombatGameMode() {
 	this->RemainingSeconds = 0;
 	this->WaveNumber = 0;
 	this->NumberOfBots = 0;
-	this->MaxBots = 5;
+	this->MaxBots = 0;
 	this->NumberOfKills = 0;
 	this->ReplenishHealthCost = 10;
 	this->ReplenishStaminahCost = 5;
@@ -58,6 +58,8 @@ void AMech_CombatGameMode::IncreaseTimer() {
 
 void AMech_CombatGameMode::TriggerNextWave() {
 	this->WaveNumber++;
+	this->NumberOfKills = 0;
+	this->MaxBots = FMath::RoundToInt(FMath::Exp(this->WaveNumber/6.f) * 5.f - 1);
 	if (this->DefaultNewWaveWidgetClass) {
 		FTimerDelegate Delegate;
 
