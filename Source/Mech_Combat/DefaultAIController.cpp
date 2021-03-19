@@ -6,7 +6,6 @@
 #include "SpiderBomb.h"
 
 ADefaultAIController::ADefaultAIController() {
-
 }
 
 void ADefaultAIController::EndPlay(const EEndPlayReason::Type EndPlayReason) {
@@ -14,7 +13,6 @@ void ADefaultAIController::EndPlay(const EEndPlayReason::Type EndPlayReason) {
 
     GetWorldTimerManager().ClearTimer(this->RoamTimer);
 }
-
 
 void ADefaultAIController::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result) {
     Super::OnMoveCompleted(RequestID, Result);

@@ -8,6 +8,7 @@
 
 UCLASS()
 class MECH_COMBAT_API AHammerWeapon : public AActor {
+
 	GENERATED_BODY()
 
 public:

@@ -59,7 +59,6 @@ void ADummyMaster::Tick(float DeltaSeconds) {
 	}
 }
 
-
 void ADummyMaster::OnSeePawn(APawn *OtherPAwn) {
 	if (OtherPAwn && OtherPAwn->IsA<AMech_CombatCharacter>()) {
 		if (this->AIController && this->PlayerCharacter && !this->bIsChasing) {

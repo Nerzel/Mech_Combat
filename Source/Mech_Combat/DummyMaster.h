@@ -15,6 +15,7 @@
 
 UCLASS(config=Game)
 class ADummyMaster : public ACharacter {
+
 	GENERATED_BODY()
 
 public:
@@ -50,5 +51,5 @@ public:
 	void OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
 			class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	void RoamToRandomLocation();
-};
 
+};
