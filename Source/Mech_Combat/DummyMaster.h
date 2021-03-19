@@ -26,12 +26,14 @@ public:
 	bool bIsChasing;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float RoamingRadius;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bIsPlayerLocked;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UParticleSystem* ExplosionParticle;
-
-protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"), Category = AI)
 	UPawnSensingComponent* PawnSensing;
+
+protected:
 	UPROPERTY(VisibleInstanceOnly)
 	AAIController* AIController;
 	UPROPERTY(VisibleInstanceOnly)
@@ -41,6 +43,7 @@ public:
 	ADummyMaster();
     virtual void BeginPlay() override;
 	virtual void PostInitializeComponents() override;
+	virtual void Tick(float DeltaSeconds) override;
 	UFUNCTION()
 	virtual void OnSeePawn(APawn *OtherPAwn);
 	UFUNCTION()

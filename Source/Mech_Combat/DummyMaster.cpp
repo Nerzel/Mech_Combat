@@ -27,6 +27,8 @@ ADummyMaster::ADummyMaster() {
 	this->bIsChasing = false;
 	this->RoamingRadius = 5000.f;
 	this->AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+	this->bIsPlayerLocked = false;
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 void ADummyMaster::PostInitializeComponents() {
@@ -49,10 +51,28 @@ void ADummyMaster::BeginPlay() {
 	RoamToRandomLocation();
 }
 
+void ADummyMaster::Tick(float DeltaSeconds) {
+	Super::Tick(DeltaSeconds);
+
+	if (this->bIsPlayerLocked) {
+		UE_LOG(LogTemp, Warning, TEXT("GO"));
+		this->AIController->MoveToActor( this->PlayerCharacter, 0.f);
+	}
+}
+
+
 void ADummyMaster::OnSeePawn(APawn *OtherPAwn) {
 	if (OtherPAwn && OtherPAwn->IsA<AMech_CombatCharacter>()) {
+		UE_LOG(LogTemp, Warning, TEXT("VUE JOUEUR"));
+		if (this->bIsChasing) {
+			UE_LOG(LogTemp, Warning, TEXT("EN CHASE"));
+		} else {
+			UE_LOG(LogTemp, Warning, TEXT("REPOS"));
+		}
+
 		if (this->AIController && this->PlayerCharacter && !this->bIsChasing) {
 			this->bIsChasing = true;
+			UE_LOG(LogTemp, Warning, TEXT("CHASE"));
 			this->AIController->MoveToActor( this->PlayerCharacter, 200.f);
 		}
 	}
@@ -114,6 +134,7 @@ void ADummyMaster::RoamToRandomLocation() {
 		FNavLocation NavLoc;
 
 		if (NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), this->RoamingRadius, NavLoc)) {
+			UE_LOG(LogTemp, Warning, TEXT("PARTROUILLE"));
 			this->AIController->MoveToLocation(NavLoc);
 		}
 	}
