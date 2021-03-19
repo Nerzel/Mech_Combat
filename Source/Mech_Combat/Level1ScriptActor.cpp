@@ -34,7 +34,7 @@ void ALevel1ScriptActor::BeginPlay() {
 void ALevel1ScriptActor::SpawnBots() {
 
 	if (this->Spawners.Num()) {
-		GetWorld()->GetTimerManager().SetTimer(this->SpawnTimer, this, &ALevel1ScriptActor::SpawnBotByClass, 3.f, true);
+		GetWorld()->GetTimerManager().SetTimer(this->SpawnTimer, this, &ALevel1ScriptActor::SpawnBotByClass, 3.f, false);
 	}
 
 }

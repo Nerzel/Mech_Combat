@@ -51,7 +51,7 @@ void ADummyMaster::BeginPlay() {
 
 void ADummyMaster::OnSeePawn(APawn *OtherPAwn) {
 	if (OtherPAwn && OtherPAwn->IsA<AMech_CombatCharacter>()) {
-		if (this->AIController && this->PlayerCharacter) {
+		if (this->AIController && this->PlayerCharacter && !this->bIsChasing) {
 			this->bIsChasing = true;
 			this->AIController->MoveToActor( this->PlayerCharacter, 200.f);
 		}
@@ -109,10 +109,12 @@ void ADummyMaster::OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, cla
 }
 
 void ADummyMaster::RoamToRandomLocation() {
-	const UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(this);
-	FNavLocation NavLoc;
+	if (!this->bIsChasing) {
+		const UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(this);
+		FNavLocation NavLoc;
 
-	if (NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), this->RoamingRadius, NavLoc)) {
-		this->AIController->MoveToLocation(NavLoc);
+		if (NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), this->RoamingRadius, NavLoc)) {
+			this->AIController->MoveToLocation(NavLoc);
+		}
 	}
 }
