@@ -55,25 +55,16 @@ void ADummyMaster::Tick(float DeltaSeconds) {
 	Super::Tick(DeltaSeconds);
 
 	if (this->bIsPlayerLocked) {
-		UE_LOG(LogTemp, Warning, TEXT("GO"));
-		this->AIController->MoveToActor( this->PlayerCharacter, 0.f);
+		this->AIController->MoveToActor( this->PlayerCharacter, 200.f, true, true, true);
 	}
 }
 
 
 void ADummyMaster::OnSeePawn(APawn *OtherPAwn) {
 	if (OtherPAwn && OtherPAwn->IsA<AMech_CombatCharacter>()) {
-		UE_LOG(LogTemp, Warning, TEXT("VUE JOUEUR"));
-		if (this->bIsChasing) {
-			UE_LOG(LogTemp, Warning, TEXT("EN CHASE"));
-		} else {
-			UE_LOG(LogTemp, Warning, TEXT("REPOS"));
-		}
-
 		if (this->AIController && this->PlayerCharacter && !this->bIsChasing) {
 			this->bIsChasing = true;
-			UE_LOG(LogTemp, Warning, TEXT("CHASE"));
-			this->AIController->MoveToActor( this->PlayerCharacter, 200.f);
+			this->AIController->MoveToActor( this->PlayerCharacter, 200.f, true, true, true);
 		}
 	}
 }
@@ -134,7 +125,6 @@ void ADummyMaster::RoamToRandomLocation() {
 		FNavLocation NavLoc;
 
 		if (NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), this->RoamingRadius, NavLoc)) {
-			UE_LOG(LogTemp, Warning, TEXT("PARTROUILLE"));
 			this->AIController->MoveToLocation(NavLoc);
 		}
 	}
