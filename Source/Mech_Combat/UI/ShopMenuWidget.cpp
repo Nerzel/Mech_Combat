@@ -31,6 +31,10 @@ void UShopMenuWidget::NativeConstruct() {
 		this->UpgradeMaxHealth->OnClicked.AddDynamic(this, &UShopMenuWidget::OnUpgradeHealthClick);
 	}
 
+	if (this->UpgradeMaxStamina) {
+		this->UpgradeMaxStamina->OnClicked.AddDynamic(this, &UShopMenuWidget::OnUpgradeStaminaClick);
+	}
+
 	if (this->UpgradeSpeed) {
 		this->UpgradeSpeed->OnClicked.AddDynamic(this, &UShopMenuWidget::OnUpgradeSpeedClick);
 	}
@@ -68,11 +72,11 @@ void UShopMenuWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	}
 
 	if (this->HealthBar) {
-		this->HealthBar->SetPercent(Character->Health);
+		this->HealthBar->SetPercent(this->Character->Health / this->Character->MaxHealth);
 	}
 
 	if (this->StaminaBar) {
-		this->StaminaBar->SetPercent(Character->Stamina);
+		this->StaminaBar->SetPercent(this->Character->Stamina / this->Character->MaxStamina);
 	}
 
 	if (this->MaxHealth) {
