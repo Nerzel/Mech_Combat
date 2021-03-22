@@ -55,7 +55,7 @@ void ADummyMaster::Tick(float DeltaSeconds) {
 	Super::Tick(DeltaSeconds);
 
 	if (this->bIsPlayerLocked) {
-		this->AIController->MoveToActor( this->PlayerCharacter, 200.f, true, true, true);
+		this->AIController->MoveToActor( this->PlayerCharacter, 0.f, true, true, true);
 	}
 }
 
@@ -63,7 +63,7 @@ void ADummyMaster::OnSeePawn(APawn *OtherPAwn) {
 	if (OtherPAwn && OtherPAwn->IsA<AMech_CombatCharacter>()) {
 		if (this->AIController && this->PlayerCharacter && !this->bIsChasing) {
 			this->bIsChasing = true;
-			this->AIController->MoveToActor( this->PlayerCharacter, 200.f, true, true, true);
+			this->AIController->MoveToActor( this->PlayerCharacter, 0.f, true, true, true);
 		}
 	}
 }
