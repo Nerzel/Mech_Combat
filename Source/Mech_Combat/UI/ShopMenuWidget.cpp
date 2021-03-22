@@ -137,14 +137,14 @@ void UShopMenuWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 }
 
 void UShopMenuWidget::OnReplishHealthClick() {
-	if (this->Character->TimeFragments >= this->GameMode->ReplenishHealthCost && this->Character->Health < 1.f) {
+	if (this->Character->TimeFragments >= this->GameMode->ReplenishHealthCost && this->Character->Health < this->Character->MaxHealth) {
 		this->Character->Health = this->Character->MaxHealth;
 		this->Character->TimeFragments -= this->GameMode->ReplenishHealthCost;
 	}
 }
 
 void UShopMenuWidget::OnReplishStaminaClick() {
-	if (this->Character->TimeFragments >= this->GameMode->ReplenishStaminahCost && this->Character->Stamina < 1.f) {
+	if (this->Character->TimeFragments >= this->GameMode->ReplenishStaminahCost && this->Character->Stamina < this->Character->MaxStamina) {
 		this->Character->Stamina = this->Character->MaxStamina;
 		this->Character->TimeFragments -= this->GameMode->ReplenishStaminahCost;
 	}
