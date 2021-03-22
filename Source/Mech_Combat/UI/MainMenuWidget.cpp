@@ -6,6 +6,10 @@
 #include "Kismet/GameplayStatics.h"
 
 UMainMenuWidget::UMainMenuWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
+	static ConstructorHelpers::FClassFinder<UInstructionWidget> InstructionBPClass(TEXT("/Game/MechCombat/Blueprints/UI/InstructionWidget_BP"));
+	if (InstructionBPClass.Class != NULL) {
+		this->DefaultInstructionWidgetClass = InstructionBPClass.Class;
+	}
 }
 
 void UMainMenuWidget::NativeConstruct() {
@@ -18,6 +22,10 @@ void UMainMenuWidget::NativeConstruct() {
 	if (this->ExitGameButton) {
 		this->ExitGameButton->OnClicked.AddDynamic(this, &UMainMenuWidget::OnExitGameButtonClick);
 	}
+
+	if (this->InstructionButton) {
+		this->InstructionButton->OnClicked.AddDynamic(this, &UMainMenuWidget::OnInstructionButtonClick);
+	}
 }
 
 void UMainMenuWidget::OnStartGameButtonClick() {
@@ -26,4 +34,9 @@ void UMainMenuWidget::OnStartGameButtonClick() {
 
 void UMainMenuWidget::OnExitGameButtonClick() {
 	GetWorld()->GetFirstPlayerController()->ConsoleCommand("quit");
+}
+
+void UMainMenuWidget::OnInstructionButtonClick() {
+	this->SetVisibility(ESlateVisibility::Hidden);
+	CreateWidget<UInstructionWidget>(GetWorld(), this->DefaultInstructionWidgetClass)->AddToViewport();
 }

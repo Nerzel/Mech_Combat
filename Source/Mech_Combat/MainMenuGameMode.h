@@ -19,6 +19,8 @@ class MECH_COMBAT_API AMainMenuGameMode : public AGameModeBase {
 public:
 	UPROPERTY(EditDefaultsOnly, Category=HUD)
 	TSubclassOf<UMainMenuWidget> DefaultMainMenuWidgetClass;
+	UPROPERTY(VisibleInstanceOnly, Category=HUD)
+	UMainMenuWidget* MainMenuWidget;
 
 public:
 	AMainMenuGameMode();

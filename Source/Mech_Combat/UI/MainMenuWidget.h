@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "InstructionWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
 
@@ -21,6 +23,10 @@ public:
 	UButton* StartGameButton;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* ExitGameButton;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UButton* InstructionButton;
+	UPROPERTY(EditDefaultsOnly, Category=HUD)
+	TSubclassOf<UInstructionWidget> DefaultInstructionWidgetClass;
 
 public:
 	UMainMenuWidget(const FObjectInitializer& ObjectInitializer);
@@ -29,5 +35,7 @@ public:
     void OnStartGameButtonClick();
 	UFUNCTION()
     void OnExitGameButtonClick();
+	UFUNCTION()
+    void OnInstructionButtonClick();
 	
 };

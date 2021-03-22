@@ -17,7 +17,8 @@ void AMainMenuGameMode::StartPlay() {
 	Super::StartPlay();
 
 	if (this->DefaultMainMenuWidgetClass) {
-		CreateWidget<UMainMenuWidget>(GetWorld(), this->DefaultMainMenuWidgetClass)->AddToViewport();
+		this->MainMenuWidget = CreateWidget<UMainMenuWidget>(GetWorld(), this->DefaultMainMenuWidgetClass);
+		this->MainMenuWidget->AddToViewport();
 	}
 
 	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = true;
