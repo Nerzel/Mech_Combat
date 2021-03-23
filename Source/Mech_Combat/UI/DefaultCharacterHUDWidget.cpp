@@ -11,78 +11,57 @@ void UDefaultCharacterHUDWidget::NativeConstruct() {
     Super::NativeConstruct();
 
     this->Character = Cast<AMech_CombatCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
-    this->GameMode = (AMech_CombatGameMode*)GetWorld()->GetAuthGameMode();
     this->FormatingOptions.MinimumIntegralDigits = 2;
     this->FormatingOptions.MaximumIntegralDigits = 2;
-    this->IconMap = new TMap<FString, UTexture2D*>();
+    this->IconMap = new TMap<UImage*, FSpecialAttackIcon>();
 
-    this->FillTextures("Whirlwind", "/Game/MechCombat/UserInterface/Whirlwind.Whirlwind");
-    this->FillTextures("WhirlwindDark", "/Game/MechCombat/UserInterface/WhirlwindDark.WhirlwindDark");
-    this->FillTextures("Helicopter", "/Game/MechCombat/UserInterface/Helicopter.Helicopter");
-    this->FillTextures("HelicopterDark", "/Game/MechCombat/UserInterface/HelicopterDark.HelicopterDark");
-    this->FillTextures("Leap", "/Game/MechCombat/UserInterface/Leap.Leap");
-    this->FillTextures("LeapDark", "/Game/MechCombat/UserInterface/LeapDark.LeapDark");
+    this->FillTextures(this->WirlwindIcon, "/Game/MechCombat/UserInterface/Whirlwind.Whirlwind",
+        "/Game/MechCombat/UserInterface/WhirlwindDark.WhirlwindDark",
+        3);
+    this->FillTextures(this->HelicopterIcon, "/Game/MechCombat/UserInterface/Helicopter.Helicopter",
+        "/Game/MechCombat/UserInterface/HelicopterDark.HelicopterDark",
+        2);
+    this->FillTextures(this->LeapIcon, "/Game/MechCombat/UserInterface/Leap.Leap",
+        "/Game/MechCombat/UserInterface/LeapDark.LeapDark",
+        2);
 }
 
-void UDefaultCharacterHUDWidget::FillTextures(const FString TextureName, const FString TexturePath) {
-    UTexture2D* Texture;
+void UDefaultCharacterHUDWidget::FillTextures(UImage* ImageWidget, const FString ActiveTexturePath, const FString InactiveTexturePath, int LimiteValue) {
+    FSpecialAttackIcon SpecialAttackIcon;
 
-    Texture = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, *TexturePath));
+    SpecialAttackIcon.ActiveIcon =  Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, *ActiveTexturePath));
+    SpecialAttackIcon.InactiveIcon = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, *InactiveTexturePath));
+    SpecialAttackIcon.LmiteValue = LimiteValue;
 
-    if (Texture) {
-        this->IconMap->Add(TextureName, Texture);
+    this->IconMap->Add(ImageWidget, SpecialAttackIcon);
+}
+
+void UDefaultCharacterHUDWidget::SetHUDIcon() {
+
+    for (TTuple<UImage*, FSpecialAttackIcon>& Elem : *this->IconMap) {
+        if (Elem.Key && this->Character->AttackEnergy >= Elem.Value.LmiteValue) {
+            Elem.Key->SetBrushFromTexture(Elem.Value.ActiveIcon);
+        } else {
+            Elem.Key->SetBrushFromTexture(Elem.Value.InactiveIcon);
+        }
     }
 }
 
-void UDefaultCharacterHUDWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) {
-    Super::NativeTick(MyGeometry, InDeltaTime);
-
-    if (this->HealthBar) {
-        this->HealthBar->SetPercent(this->Character->Health / this->Character->MaxHealth);
-    }
-
-    if (this->StaminaBar) {
-        this->StaminaBar->SetPercent(this->Character->Stamina / this->Character->MaxStamina);
-    }
-
-    if (this->AttackEnergyBar) {
-        this->AttackEnergyBar->SetPercent(this->Character->AttackEnergy / 12.0f);
-    }
-
-    if (this->MinuteTextBlock && this->SecondTextBlock) {
-        this->MinuteTextBlock->SetText(FText::AsNumber(this->GameMode->RemainingMinutes, &this->FormatingOptions));
-        this->SecondTextBlock->SetText(FText::AsNumber(this->GameMode->RemainingSeconds, &this->FormatingOptions));
-    }
-
-    if (this->WirlwindIcon) {
-        this->SetHUDIcon(this->WirlwindIcon, 3, "Whirlwind");
-    }
-
-    if (this->HelicopterIcon) {
-        this->SetHUDIcon(this->HelicopterIcon, 2, "Helicopter");
-    }
-
-    if (this->LeapIcon) {
-        this->SetHUDIcon(this->LeapIcon, 2, "Leap");
-    }
-
-    if (this->TimeFragmentNumber) {
-        this->TimeFragmentNumber->SetText(FText::AsNumber(this->Character->TimeFragments, &this->FormatingOptions));
-    }
-
+void UDefaultCharacterHUDWidget::UpdateWaveNumber(const int NewWaveNumber) {
     if (this->WaveNumber) {
-        this->WaveNumber->SetText(FText::AsNumber(this->GameMode->WaveNumber, &this->FormatingOptions));
-    }
-
-    if (this->NumberOfEnemies) {
-        this->NumberOfEnemies->SetText(FText::AsNumber(this->GameMode->NumberOfBots, &this->FormatingOptions));
+        this->WaveNumber->SetText(FText::AsNumber(NewWaveNumber, &this->FormatingOptions));
     }
 }
 
-void UDefaultCharacterHUDWidget::SetHUDIcon(UImage* ImageWidget, const int LimitValue, const FString IconName) {
-    if (this->Character->AttackEnergy >= LimitValue) {
-        ImageWidget->SetBrushFromTexture(*this->IconMap->Find(IconName));
-    } else {
-        ImageWidget->SetBrushFromTexture(*this->IconMap->Find(IconName + "Dark"));
+void UDefaultCharacterHUDWidget::UpdateTimer(const int Minutes, const int Seconds) {
+    if (this->MinuteTextBlock && this->SecondTextBlock) {
+        this->MinuteTextBlock->SetText(FText::AsNumber(Minutes, &this->FormatingOptions));
+        this->SecondTextBlock->SetText(FText::AsNumber(Seconds, &this->FormatingOptions));
+    }
+}
+
+void UDefaultCharacterHUDWidget::UpdateNumberOfEnemies(const int NewNumberOfEnemies) {
+    if (this->NumberOfEnemies) {
+        this->NumberOfEnemies->SetText(FText::AsNumber(NewNumberOfEnemies, &this->FormatingOptions));
     }
 }

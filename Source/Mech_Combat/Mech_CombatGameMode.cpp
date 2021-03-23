@@ -1,6 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "Mech_CombatGameMode.h"
+
+#include "Mech_CombatCharacter.h"
+#include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 
 AMech_CombatGameMode::AMech_CombatGameMode() {
@@ -42,24 +45,30 @@ void AMech_CombatGameMode::EndPlay(const EEndPlayReason::Type EndPlayReason) {
 void AMech_CombatGameMode::StartPlay() {
 	Super::StartPlay();
 
+	this->PlayerCharacter = Cast<AMech_CombatCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
 	this->TriggerNextWave();
-
 	GetWorldTimerManager().SetTimer(SecondIncreaseTimer, this, &AMech_CombatGameMode::IncreaseTimer, 1.0f, true);
 }
 
 void AMech_CombatGameMode::IncreaseTimer() {
+
 	if (this->RemainingSeconds == 59) {
 		this->RemainingSeconds = 0;
 		this->RemainingMinutes++;
 	} else {
 		this->RemainingSeconds++;
 	}
+
+	if (this->PlayerCharacter) {
+		this->PlayerCharacter->GetCharacterHUDWidget()->UpdateTimer(this->RemainingMinutes, this->RemainingSeconds);
+	}
 }
 
 void AMech_CombatGameMode::TriggerNextWave() {
 	this->WaveNumber++;
 	this->NumberOfKills = 0;
-	this->MaxBots = FMath::RoundToInt(FMath::Exp(this->WaveNumber/6.f) * 5.f - 1);
+	this->MaxBots = FMath::RoundToInt(FMath::Exp(this->WaveNumber / 6.f) * 5.f - 1);
+
 	if (this->DefaultNewWaveWidgetClass) {
 		FTimerDelegate Delegate;
 
@@ -69,5 +78,17 @@ void AMech_CombatGameMode::TriggerNextWave() {
 
 		Delegate.BindLambda([this] { this->NewWaveWidget->RemoveFromViewport(); });
 		GetWorldTimerManager().SetTimer(NewWaveWidgetTimer, Delegate, 2.0f, false);
+
+		if (this->PlayerCharacter) {
+			this->PlayerCharacter->GetCharacterHUDWidget()->UpdateWaveNumber(this->WaveNumber);
+		}
+	}
+}
+
+void AMech_CombatGameMode::ModifyNumberOfBots(const int Delta) {
+	this->NumberOfBots += Delta;
+
+	if (this->PlayerCharacter) {
+		this->PlayerCharacter->GetCharacterHUDWidget()->UpdateNumberOfEnemies(this->NumberOfBots);
 	}
 }

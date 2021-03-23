@@ -42,6 +42,7 @@ void ATimeFragment::NotifyActorBeginOverlap(AActor* OtherActor) {
 
 	if (OtherActor && OtherActor->IsA<AMech_CombatCharacter>()) {
 		Cast<AMech_CombatCharacter>(OtherActor)->TimeFragments++;
+		Cast<AMech_CombatCharacter>(OtherActor)->UpdateHUDTimeFragments();
 		Destroy();
 	}
 }

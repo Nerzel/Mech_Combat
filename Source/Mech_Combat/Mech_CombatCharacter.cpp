@@ -258,6 +258,7 @@ void AMech_CombatCharacter::DecreaseStaminaWhileSprinting() {
 	if (this->Stamina <= 0.0f) {
 		StopSprinting(false);
 	}
+	this->UpdateStaminaBar();
 }
 
 void AMech_CombatCharacter::IncreaseStaminaAfterSprinting() {
@@ -266,6 +267,7 @@ void AMech_CombatCharacter::IncreaseStaminaAfterSprinting() {
 	} else {
 		GetWorldTimerManager().ClearTimer(EnergyIncreaseTimer);
 	}
+	this->UpdateStaminaBar();
 }
 
 void AMech_CombatCharacter::AutoIncreaseStamina() {
@@ -280,6 +282,7 @@ void AMech_CombatCharacter::ExecuteWhirlwindAttack() {
 		this->bIsAlreadyAttacking = true;
 		this->DamageType = 2;
 		this->AttackEnergy -= 3;
+		this->UpdateHUDAfterSpecialAttack();
 	}
 }
 
@@ -297,6 +300,7 @@ void AMech_CombatCharacter::ExecuteHelicopterAttack() {
 		this->bIsAlreadyAttacking = true;
 		this->DamageType = 3;
 		this->AttackEnergy -= 2;
+		this->UpdateHUDAfterSpecialAttack();
 	}
 }
 
@@ -317,6 +321,7 @@ void AMech_CombatCharacter::ExecuteLeap() {
 
 		GetCharacterMovement()->AddImpulse(GetActorForwardVector() * 1000.0f + FVector(0.0f, 0.0f,600.0f), true);
 		GetWorldTimerManager().SetTimer(LeapTimer, this, &AMech_CombatCharacter::StopLeap, 1.0f, false);
+		this->UpdateHUDAfterSpecialAttack();
 	}
 }
 
@@ -366,5 +371,45 @@ void AMech_CombatCharacter::GameOver() {
 		this->GameOverWidget->SetWaveNumberText(GameMode->WaveNumber);
 		this->GameOverWidget->AddToViewport();
 		GetWorld()->GetFirstPlayerController()->bShowMouseCursor = true;
+	}
+}
+
+void AMech_CombatCharacter::UpdateHealthBar() {
+	if (this->CharacterHUDWidget && this->CharacterHUDWidget->HealthBar) {
+		this->CharacterHUDWidget->HealthBar->SetPercent(this->Health / this->MaxHealth);
+	}
+}
+
+void AMech_CombatCharacter::UpdateStaminaBar() {
+	if (this->CharacterHUDWidget && this->CharacterHUDWidget->StaminaBar) {
+		this->CharacterHUDWidget->StaminaBar->SetPercent(this->Stamina / this->MaxStamina);
+	}
+}
+
+void AMech_CombatCharacter::UpdateAttackEnergyBar() {
+	if (this->CharacterHUDWidget && this->CharacterHUDWidget->AttackEnergyBar) {
+		this->CharacterHUDWidget->AttackEnergyBar->SetPercent(this->AttackEnergy / 12.0f);
+		this->CharacterHUDWidget->SetHUDIcon();
+	}
+}
+
+void AMech_CombatCharacter::UpdateHUDAfterSpecialAttack() {
+	if (this->CharacterHUDWidget) {
+
+		if (this->CharacterHUDWidget->AttackEnergyBar) {
+			this->CharacterHUDWidget->AttackEnergyBar->SetPercent(this->AttackEnergy / 12.0f);
+		}
+
+		if (this->CharacterHUDWidget->WirlwindIcon &&
+			this->CharacterHUDWidget->HelicopterIcon &&
+			this->CharacterHUDWidget->LeapIcon) {
+			this->CharacterHUDWidget->SetHUDIcon();
+		}
+	}
+}
+
+void AMech_CombatCharacter::UpdateHUDTimeFragments() {
+	if (this->CharacterHUDWidget && this->CharacterHUDWidget->TimeFragmentNumber) {
+		this->CharacterHUDWidget->TimeFragmentNumber->SetText(FText::AsNumber(this->TimeFragments, &this->CharacterHUDWidget->FormatingOptions));
 	}
 }

@@ -8,6 +8,8 @@
 
 #include "Mech_CombatGameMode.generated.h"
 
+class AMech_CombatCharacter;
+
 UCLASS(minimalapi)
 class AMech_CombatGameMode : public AGameModeBase {
 
@@ -37,12 +39,15 @@ public:
 private:
 	FTimerHandle SecondIncreaseTimer;
 	FTimerHandle NewWaveWidgetTimer;
+	UPROPERTY(VisibleInstanceOnly)
+	AMech_CombatCharacter* PlayerCharacter;
 
 public:
 	AMech_CombatGameMode();
 	virtual void StartPlay() override;
 	void IncreaseTimer();
 	void TriggerNextWave();
+	void ModifyNumberOfBots(const int Delta);
 
 private:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;

@@ -61,6 +61,7 @@ void AProjectile::OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, clas
 
 		Character = Cast<AMech_CombatCharacter>(OtherActor);
 		Character->Health -= 0.05f;
+		Character->UpdateHealthBar();
 
 		if (Character->Health <= 0.f) {
 			Character->Death();

@@ -21,6 +21,6 @@ void ASpawner::BeginPlay() {
 
 void ASpawner::SpawnBot(UClass* Class) {
 	GetWorld()->SpawnActor<ADummyMaster>(Class, this->GetTransform());
-	GameMode->NumberOfBots++;
+	this->GameMode->ModifyNumberOfBots(1);
 }
 

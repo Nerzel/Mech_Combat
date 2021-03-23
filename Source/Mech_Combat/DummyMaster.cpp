@@ -82,6 +82,7 @@ void ADummyMaster::OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, cla
 					this->Health -= Cast<AHammerWeapon>(OtherActor)->BaseDamage + this->PlayerCharacter->NormalDamage;
 					if (Character->AttackEnergy < 12) {
 						Character->AttackEnergy++;
+						Character->UpdateAttackEnergyBar();
 					}
 					break;
 				case 2:
@@ -108,7 +109,7 @@ void ADummyMaster::OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, cla
 				SpawnParams.Instigator = this;
 				GetWorld()->SpawnActor<ATimeFragment>(this->DefaultCollectableClass, GetActorTransform(), SpawnParams);
 
-				Cast<AMech_CombatGameMode>(GetWorld()->GetAuthGameMode())->NumberOfBots--;
+				Cast<AMech_CombatGameMode>(GetWorld()->GetAuthGameMode())->ModifyNumberOfBots(-1);
 				Cast<AMech_CombatGameMode>(GetWorld()->GetAuthGameMode())->NumberOfKills++;
 				Destroy();
 			}

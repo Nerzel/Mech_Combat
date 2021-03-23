@@ -4,20 +4,23 @@
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
-#include "Mech_Combat/Mech_CombatGameMode.h"
 
 #include "DefaultCharacterHUDWidget.generated.h"
 
 class AMech_CombatCharacter;
+
+struct FSpecialAttackIcon {
+    UTexture2D* ActiveIcon;
+    UTexture2D* InactiveIcon;
+    int LmiteValue;
+};
+
 UCLASS()
 class MECH_COMBAT_API UDefaultCharacterHUDWidget : public UUserWidget {
 
     GENERATED_BODY()
 
 public:
-    UDefaultCharacterHUDWidget(const FObjectInitializer& ObjectInitializer);
-    virtual void NativeConstruct() override;
-    virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
     UProgressBar* HealthBar;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -40,18 +43,22 @@ public:
     UTextBlock* WaveNumber;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
     UTextBlock* NumberOfEnemies;
-
+    FNumberFormattingOptions FormatingOptions;
 
 private:
     UPROPERTY(VisibleInstanceOnly)
     AMech_CombatCharacter* Character;
-    UPROPERTY(VisibleInstanceOnly)
-    AMech_CombatGameMode* GameMode;
-    FNumberFormattingOptions FormatingOptions;
-    TMap<FString, UTexture2D*>* IconMap;
+    TMap<UImage*, FSpecialAttackIcon>* IconMap;
+
+public:
+    UDefaultCharacterHUDWidget(const FObjectInitializer& ObjectInitializer);
+    virtual void NativeConstruct() override;
+    void SetHUDIcon();
+    void UpdateWaveNumber(const int NewWaveNumber);
+    void UpdateTimer(const int Minutes, const int Seconds);
+    void UpdateNumberOfEnemies(const int NewNumberOfEnemies);
 
 private:
-    void SetHUDIcon(UImage* ImageWidget, const int LimitValue, const FString IconName);
-    void FillTextures(const FString TextureName, const FString TexturePath);
+    void FillTextures(UImage* ImageWidget, const FString ActiveTexturePath, const FString InactiveTexturePath, int LimiteValue);
 
 };

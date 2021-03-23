@@ -7,11 +7,10 @@
 #include "Components/Button.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
+#include "Mech_Combat/Mech_CombatGameMode.h"
 
 #include "ShopMenuWidget.generated.h"
 
-class AMech_CombatGameMode;
-class AMech_CombatCharacter;
 /**
  * 
  */

@@ -3,7 +3,6 @@
 
 #include "ShopMenuWidget.h"
 
-
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Mech_Combat/Mech_CombatCharacter.h"
@@ -140,6 +139,7 @@ void UShopMenuWidget::OnReplishHealthClick() {
 	if (this->Character->TimeFragments >= this->GameMode->ReplenishHealthCost && this->Character->Health < this->Character->MaxHealth) {
 		this->Character->Health = this->Character->MaxHealth;
 		this->Character->TimeFragments -= this->GameMode->ReplenishHealthCost;
+		this->Character->UpdateHUDTimeFragments();
 	}
 }
 
@@ -147,6 +147,7 @@ void UShopMenuWidget::OnReplishStaminaClick() {
 	if (this->Character->TimeFragments >= this->GameMode->ReplenishStaminahCost && this->Character->Stamina < this->Character->MaxStamina) {
 		this->Character->Stamina = this->Character->MaxStamina;
 		this->Character->TimeFragments -= this->GameMode->ReplenishStaminahCost;
+		this->Character->UpdateHUDTimeFragments();
 	}
 }
 
@@ -154,6 +155,7 @@ void UShopMenuWidget::OnUpgradeHealthClick() {
 	if (this->Character->TimeFragments >= this->GameMode->HealthUpgradeCost) {
 		this->Character->MaxHealth *= 1.2f;
 		this->Character->TimeFragments -= this->GameMode->HealthUpgradeCost;
+		this->Character->UpdateHUDTimeFragments();
 		this->GameMode->HealthUpgradeCost *= 2;
 	}
 }
@@ -162,6 +164,7 @@ void UShopMenuWidget::OnUpgradeStaminaClick() {
 	if (this->Character->TimeFragments >= this->GameMode->StaminaUpgradeCost) {
 		this->Character->MaxStamina *= 1.2f;
 		this->Character->TimeFragments -= this->GameMode->StaminaUpgradeCost;
+		this->Character->UpdateHUDTimeFragments();
 		this->GameMode->StaminaUpgradeCost *= 2;
 		this->Character->AutoIncreaseStamina();
 	}
@@ -172,6 +175,7 @@ void UShopMenuWidget::OnUpgradeSpeedClick() {
 		this->Character->MovementSpeed += 200;
 		this->Character->GetCharacterMovement()->MaxWalkSpeed = this->Character->MovementSpeed;
 		this->Character->TimeFragments -= this->GameMode->SpeedUpgradeCost;
+		this->Character->UpdateHUDTimeFragments();
 		this->GameMode->SpeedUpgradeCost *= 2.5f;
 	}
 }
@@ -180,6 +184,7 @@ void UShopMenuWidget::OnUpgradeDamageClick() {
 	if (this->Character->TimeFragments >= this->GameMode->DamageUpgradeCost) {
 		this->Character->NormalDamage += 0.1f;
 		this->Character->TimeFragments -= this->GameMode->DamageUpgradeCost;
+		this->Character->UpdateHUDTimeFragments();
 		this->GameMode->DamageUpgradeCost *= 2;
 	}
 }
@@ -188,6 +193,7 @@ void UShopMenuWidget::OnUpgradeWhirlwindClick() {
 	if (this->Character->TimeFragments >= this->GameMode->WhirlwindUpgradeCost) {
 		this->Character->WhirlwindDamage += 0.1f;
 		this->Character->TimeFragments -= this->GameMode->WhirlwindUpgradeCost;
+		this->Character->UpdateHUDTimeFragments();
 		this->GameMode->WhirlwindUpgradeCost *= 2;
 	}
 }
@@ -196,6 +202,7 @@ void UShopMenuWidget::OnUpgradeHelicopterClick() {
 	if (this->Character->TimeFragments >= this->GameMode->HelicopterUpgradeCost) {
 		this->Character->HelicopterDamage += 0.15f;
 		this->Character->TimeFragments -= this->GameMode->HelicopterUpgradeCost;
+		this->Character->UpdateHUDTimeFragments();
 		this->GameMode->HelicopterUpgradeCost *= 2;
 	}
 }
@@ -204,6 +211,7 @@ void UShopMenuWidget::OnUpgradeLeapClick() {
 	if (this->Character->TimeFragments >= this->GameMode->LeapUpgradeCost) {
 		this->Character->LeapDamage += 0.2f;
 		this->Character->TimeFragments -= this->GameMode->LeapUpgradeCost;
+		this->Character->UpdateHUDTimeFragments();
 		this->GameMode->LeapUpgradeCost *= 2;
 	}
 }

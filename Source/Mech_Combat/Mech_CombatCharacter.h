@@ -216,6 +216,11 @@ public:
 	void ToggleShopMenu();
 	void AutoIncreaseStamina();
 	void Death();
+	void UpdateHealthBar();
+	void UpdateStaminaBar();
+	void UpdateHUDAfterSpecialAttack();
+	void UpdateHUDTimeFragments();
+	void UpdateAttackEnergyBar();
 
 private:
 	UFUNCTION()
