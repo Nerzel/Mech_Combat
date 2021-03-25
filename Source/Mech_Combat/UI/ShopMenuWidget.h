@@ -107,5 +107,8 @@ public:
     void OnUpgradeHelicopterClick();
 	UFUNCTION()
     void OnUpgradeLeapClick();
+	void UpdateTimeFragments();
+	void UpdateHealthBar();
+	void UpdateStaminaBar();
 
 };

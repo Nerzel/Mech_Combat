@@ -347,6 +347,10 @@ void AMech_CombatCharacter::ToggleShopMenu() {
 			GetWorld()->GetFirstPlayerController()->bShowMouseCursor = true;
 			GetWorld()->GetFirstPlayerController()->SetInputMode(FInputModeGameAndUI());
 			this->bIsShopOpened = true;
+
+			this->ShopMenuWidget->UpdateTimeFragments();
+			this->ShopMenuWidget->UpdateHealthBar();
+			this->ShopMenuWidget->UpdateStaminaBar();
 		}
 	}
 
@@ -378,11 +382,17 @@ void AMech_CombatCharacter::UpdateHealthBar() {
 	if (this->CharacterHUDWidget && this->CharacterHUDWidget->HealthBar) {
 		this->CharacterHUDWidget->HealthBar->SetPercent(this->Health / this->MaxHealth);
 	}
+	if (this->ShopMenuWidget && this->ShopMenuWidget->HealthBar && this->ShopMenuWidget->IsVisible()) {
+		this->ShopMenuWidget->UpdateHealthBar();
+	}
 }
 
 void AMech_CombatCharacter::UpdateStaminaBar() {
 	if (this->CharacterHUDWidget && this->CharacterHUDWidget->StaminaBar) {
 		this->CharacterHUDWidget->StaminaBar->SetPercent(this->Stamina / this->MaxStamina);
+	}
+	if (this->ShopMenuWidget && this->ShopMenuWidget->HealthBar && this->ShopMenuWidget->IsVisible()) {
+		this->ShopMenuWidget->UpdateStaminaBar();
 	}
 }
 
