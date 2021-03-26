@@ -43,12 +43,24 @@ public:
     UTextBlock* WaveNumber;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
     UTextBlock* NumberOfEnemies;
+    UPROPERTY(EditDefaultsOnly)
+    UTexture2D* WirlwindActiveIcon;
+    UPROPERTY(EditDefaultsOnly)
+    UTexture2D* WirlwindInactiveIcon;
+    UPROPERTY(EditDefaultsOnly)
+    UTexture2D* HelicopterActiveIcon;
+    UPROPERTY(EditDefaultsOnly)
+    UTexture2D* HelicopterInactiveIcon;
+    UPROPERTY(EditDefaultsOnly)
+    UTexture2D* LeapActiveIcon;
+    UPROPERTY(EditDefaultsOnly)
+    UTexture2D* LeapInactiveIcon;
     FNumberFormattingOptions FormatingOptions;
 
 private:
     UPROPERTY(VisibleInstanceOnly)
     AMech_CombatCharacter* Character;
-    TMap<UImage*, FSpecialAttackIcon>* IconMap;
+    TMap<UImage*, FSpecialAttackIcon*>* IconMap;
 
 public:
     UDefaultCharacterHUDWidget(const FObjectInitializer& ObjectInitializer);
@@ -59,6 +71,6 @@ public:
     void UpdateNumberOfEnemies(const int NewNumberOfEnemies);
 
 private:
-    void FillTextures(UImage* ImageWidget, const FString ActiveTexturePath, const FString InactiveTexturePath, int LimiteValue);
+    void FillTextures(UImage* ImageWidget, UTexture2D* ActiveTexture, UTexture2D* InactiveTexture, int LimiteValue);
 
 };

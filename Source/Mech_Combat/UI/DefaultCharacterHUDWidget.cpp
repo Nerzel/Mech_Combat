@@ -13,36 +13,31 @@ void UDefaultCharacterHUDWidget::NativeConstruct() {
     this->Character = Cast<AMech_CombatCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
     this->FormatingOptions.MinimumIntegralDigits = 2;
     this->FormatingOptions.MaximumIntegralDigits = 2;
-    this->IconMap = new TMap<UImage*, FSpecialAttackIcon>();
+    this->IconMap = new TMap<UImage*, FSpecialAttackIcon*>();
 
-    this->FillTextures(this->WirlwindIcon, "/Game/MechCombat/UserInterface/Whirlwind.Whirlwind",
-        "/Game/MechCombat/UserInterface/WhirlwindDark.WhirlwindDark",
-        3);
-    this->FillTextures(this->HelicopterIcon, "/Game/MechCombat/UserInterface/Helicopter.Helicopter",
-        "/Game/MechCombat/UserInterface/HelicopterDark.HelicopterDark",
-        2);
-    this->FillTextures(this->LeapIcon, "/Game/MechCombat/UserInterface/Leap.Leap",
-        "/Game/MechCombat/UserInterface/LeapDark.LeapDark",
-        2);
+    this->FillTextures(this->WirlwindIcon, this->WirlwindActiveIcon, this->WirlwindInactiveIcon, 3);
+    this->FillTextures(this->HelicopterIcon, this->HelicopterActiveIcon, this->HelicopterInactiveIcon, 2);
+    this->FillTextures(this->LeapIcon, this->LeapActiveIcon, this->LeapInactiveIcon, 2);
 }
 
-void UDefaultCharacterHUDWidget::FillTextures(UImage* ImageWidget, const FString ActiveTexturePath, const FString InactiveTexturePath, int LimiteValue) {
-    FSpecialAttackIcon SpecialAttackIcon;
+void UDefaultCharacterHUDWidget::FillTextures(UImage* ImageWidget, UTexture2D* ActiveTexture, UTexture2D* InactiveTexture, int LimiteValue) {
+    FSpecialAttackIcon* SpecialAttackIcon;
 
-    SpecialAttackIcon.ActiveIcon =  Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, *ActiveTexturePath));
-    SpecialAttackIcon.InactiveIcon = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, *InactiveTexturePath));
-    SpecialAttackIcon.LmiteValue = LimiteValue;
+    SpecialAttackIcon = new FSpecialAttackIcon();
+    SpecialAttackIcon->ActiveIcon = ActiveTexture;
+    SpecialAttackIcon->InactiveIcon = InactiveTexture;
+    SpecialAttackIcon->LmiteValue = LimiteValue;
 
     this->IconMap->Add(ImageWidget, SpecialAttackIcon);
 }
 
 void UDefaultCharacterHUDWidget::SetHUDIcon() {
     if (this->WirlwindIcon && this->HelicopterIcon && this->LeapIcon) {
-        for (TTuple<UImage*, FSpecialAttackIcon>& Elem : *this->IconMap) {
-            if (Elem.Key && this->Character->AttackEnergy >= Elem.Value.LmiteValue) {
-                Elem.Key->SetBrushFromTexture(Elem.Value.ActiveIcon);
+        for (TTuple<UImage*, FSpecialAttackIcon*>& Elem : *this->IconMap) {
+            if (Elem.Key && this->Character->AttackEnergy >= Elem.Value->LmiteValue) {
+                Elem.Key->SetBrushFromTexture(Elem.Value->ActiveIcon);
             } else {
-                Elem.Key->SetBrushFromTexture(Elem.Value.InactiveIcon);
+                Elem.Key->SetBrushFromTexture(Elem.Value->InactiveIcon);
             }
         }
     }
