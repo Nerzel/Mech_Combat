@@ -88,7 +88,6 @@ private:
 public:
 	UShopMenuWidget(const FObjectInitializer& ObjectInitializer);
 	virtual void NativeConstruct() override;
-	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	UFUNCTION()
 	void OnReplishHealthClick();
 	UFUNCTION()
@@ -110,5 +109,19 @@ public:
 	void UpdateTimeFragments();
 	void UpdateHealthBar();
 	void UpdateStaminaBar();
+	void UpdateMaxHealthText();
+	void UpdateMaxStaminaText();
+	void UpdateMaxSpeedText();
+	void UpdateCurrentDamageText();
+	void UpdateWhirlwindDamageText();
+	void UpdateHelicopterDamageText();
+	void UpdateLeapDamageText();
+	void UpdateHealthCost();
+	void UpdateStaminaCost();
+	void UpdateSpeedCost();
+	void UpdateDamageCost();
+	void UpdateWhirlwindCost();
+	void UpdateHelicopterCost();
+	void UpdateLeapCost();
 
 };

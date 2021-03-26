@@ -37,12 +37,13 @@ void UDefaultCharacterHUDWidget::FillTextures(UImage* ImageWidget, const FString
 }
 
 void UDefaultCharacterHUDWidget::SetHUDIcon() {
-
-    for (TTuple<UImage*, FSpecialAttackIcon>& Elem : *this->IconMap) {
-        if (Elem.Key && this->Character->AttackEnergy >= Elem.Value.LmiteValue) {
-            Elem.Key->SetBrushFromTexture(Elem.Value.ActiveIcon);
-        } else {
-            Elem.Key->SetBrushFromTexture(Elem.Value.InactiveIcon);
+    if (this->WirlwindIcon && this->HelicopterIcon && this->LeapIcon) {
+        for (TTuple<UImage*, FSpecialAttackIcon>& Elem : *this->IconMap) {
+            if (Elem.Key && this->Character->AttackEnergy >= Elem.Value.LmiteValue) {
+                Elem.Key->SetBrushFromTexture(Elem.Value.ActiveIcon);
+            } else {
+                Elem.Key->SetBrushFromTexture(Elem.Value.InactiveIcon);
+            }
         }
     }
 }

@@ -410,11 +410,7 @@ void AMech_CombatCharacter::UpdateHUDAfterSpecialAttack() {
 			this->CharacterHUDWidget->AttackEnergyBar->SetPercent(this->AttackEnergy / 12.0f);
 		}
 
-		if (this->CharacterHUDWidget->WirlwindIcon &&
-			this->CharacterHUDWidget->HelicopterIcon &&
-			this->CharacterHUDWidget->LeapIcon) {
-			this->CharacterHUDWidget->SetHUDIcon();
-		}
+		this->CharacterHUDWidget->SetHUDIcon();
 	}
 }
 

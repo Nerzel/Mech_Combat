@@ -63,78 +63,6 @@ void UShopMenuWidget::NativeConstruct() {
 	}
 }
 
-void UShopMenuWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) {
-	Super::NativeTick(MyGeometry, InDeltaTime);
-
-	// if (this->CurrentTimeFragments) {
-	// 	this->CurrentTimeFragments->SetText(FText::AsNumber(this->Character->TimeFragments, &this->FormatingOptions3Ints));
-	// }
-
-	// if (this->HealthBar) {
-	// 	this->HealthBar->SetPercent(this->Character->Health / this->Character->MaxHealth);
-	// }
-
-	// if (this->StaminaBar) {
-	// 	this->StaminaBar->SetPercent(this->Character->Stamina / this->Character->MaxStamina);
-	// }
-
-	if (this->MaxHealth) {
-		this->MaxHealth->SetText(FText::AsPercent(this->Character->MaxHealth));
-	}
-
-	if (this->MaxStamina) {
-		this->MaxStamina->SetText(FText::AsPercent(this->Character->MaxStamina));
-	}
-
-	if (this->MaxSpeed) {
-		this->MaxSpeed->SetText(FText::AsPercent(static_cast<float>(this->Character->MovementSpeed) / static_cast<float>(this->Character->DefaultMovementSpeed)));
-	}
-
-	if (this->CurrentDamage) {
-		this->CurrentDamage->SetText(FText::AsNumber(this->Character->NormalDamage * 100));
-	}
-
-	if (this->CurrentWhirlwindDamage) {
-		this->CurrentWhirlwindDamage->SetText(FText::AsNumber(this->Character->WhirlwindDamage * 100));
-	}
-
-	if (this->CurrentHelicopterDamage) {
-		this->CurrentHelicopterDamage->SetText(FText::AsNumber(this->Character->HelicopterDamage * 100));
-	}
-
-	if (this->CurrentLeapDamage) {
-		this->CurrentLeapDamage->SetText(FText::AsNumber(this->Character->LeapDamage * 100));
-	}
-
-	if (this->HealthUpgradeCost) {
-		this->HealthUpgradeCost->SetText(FText::AsNumber(this->GameMode->HealthUpgradeCost, &this->FormatingOptions2Ints));
-	}
-
-	if (this->StaminaUpgradeCost) {
-		this->StaminaUpgradeCost->SetText(FText::AsNumber(this->GameMode->StaminaUpgradeCost, &this->FormatingOptions2Ints));
-	}
-
-	if (this->SpeedUpgradeCost) {
-		this->SpeedUpgradeCost->SetText(FText::AsNumber(this->GameMode->SpeedUpgradeCost, &this->FormatingOptions2Ints));
-	}
-
-	if (this->DamageUpgradeCost) {
-		this->DamageUpgradeCost->SetText(FText::AsNumber(this->GameMode->DamageUpgradeCost, &this->FormatingOptions2Ints));
-	}
-
-	if (this->WhirlwindUpgradeCost) {
-		this->WhirlwindUpgradeCost->SetText(FText::AsNumber(this->GameMode->WhirlwindUpgradeCost, &this->FormatingOptions2Ints));
-	}
-
-	if (this->HelicopterUpgradeCost) {
-		this->HelicopterUpgradeCost->SetText(FText::AsNumber(this->GameMode->HelicopterUpgradeCost, &this->FormatingOptions2Ints));
-	}
-
-	if (this->LeapUpgradeCost) {
-		this->LeapUpgradeCost->SetText(FText::AsNumber(this->GameMode->LeapUpgradeCost, &this->FormatingOptions2Ints));
-	}
-}
-
 void UShopMenuWidget::OnReplishHealthClick() {
 	if (this->Character->TimeFragments >= this->GameMode->ReplenishHealthCost && this->Character->Health < this->Character->MaxHealth) {
 		this->Character->Health = this->Character->MaxHealth;
@@ -163,6 +91,8 @@ void UShopMenuWidget::OnUpgradeHealthClick() {
 		this->Character->UpdateHUDTimeFragments();
 		this->GameMode->HealthUpgradeCost *= 2;
 		this->Character->UpdateHealthBar();
+		this->UpdateMaxHealthText();
+		this->UpdateHealthCost();
 	}
 }
 
@@ -175,6 +105,8 @@ void UShopMenuWidget::OnUpgradeStaminaClick() {
 		this->GameMode->StaminaUpgradeCost *= 2;
 		this->Character->AutoIncreaseStamina();
 		this->Character->UpdateStaminaBar();
+		this->UpdateMaxStaminaText();
+		this->UpdateStaminaCost();
 	}
 }
 
@@ -186,6 +118,8 @@ void UShopMenuWidget::OnUpgradeSpeedClick() {
 		this->UpdateTimeFragments();
 		this->Character->UpdateHUDTimeFragments();
 		this->GameMode->SpeedUpgradeCost *= 2.5f;
+		this->UpdateMaxSpeedText();
+		this->UpdateSpeedCost();
 	}
 }
 
@@ -196,6 +130,8 @@ void UShopMenuWidget::OnUpgradeDamageClick() {
 		this->UpdateTimeFragments();
 		this->Character->UpdateHUDTimeFragments();
 		this->GameMode->DamageUpgradeCost *= 2;
+		this->UpdateCurrentDamageText();
+		this->UpdateDamageCost();
 	}
 }
 
@@ -206,6 +142,8 @@ void UShopMenuWidget::OnUpgradeWhirlwindClick() {
 		this->UpdateTimeFragments();
 		this->Character->UpdateHUDTimeFragments();
 		this->GameMode->WhirlwindUpgradeCost *= 2;
+		this->UpdateWhirlwindDamageText();
+		this->UpdateWhirlwindCost();
 	}
 }
 
@@ -216,6 +154,8 @@ void UShopMenuWidget::OnUpgradeHelicopterClick() {
 		this->UpdateTimeFragments();
 		this->Character->UpdateHUDTimeFragments();
 		this->GameMode->HelicopterUpgradeCost *= 2;
+		this->UpdateHelicopterDamageText();
+		this->UpdateHelicopterCost();
 	}
 }
 
@@ -226,6 +166,8 @@ void UShopMenuWidget::OnUpgradeLeapClick() {
 		this->UpdateTimeFragments();
 		this->Character->UpdateHUDTimeFragments();
 		this->GameMode->LeapUpgradeCost *= 2;
+		this->UpdateLeapDamageText();
+		this->UpdateLeapCost();
 	}
 }
 
@@ -244,5 +186,89 @@ void UShopMenuWidget::UpdateHealthBar() {
 void UShopMenuWidget::UpdateStaminaBar() {
 	if (this->StaminaBar) {
 		this->StaminaBar->SetPercent(this->Character->Stamina / this->Character->MaxStamina);
+	}
+}
+
+void UShopMenuWidget::UpdateMaxHealthText() {
+	if (this->MaxHealth) {
+		this->MaxHealth->SetText(FText::AsPercent(this->Character->MaxHealth));
+	}
+}
+
+void UShopMenuWidget::UpdateMaxStaminaText() {
+	if (this->MaxStamina) {
+		this->MaxStamina->SetText(FText::AsPercent(this->Character->MaxStamina));
+	}
+}
+
+void UShopMenuWidget::UpdateMaxSpeedText() {
+	if (this->MaxSpeed) {
+		this->MaxSpeed->SetText(FText::AsPercent(static_cast<float>(this->Character->MovementSpeed) / static_cast<float>(this->Character->DefaultMovementSpeed)));
+	}
+}
+
+void UShopMenuWidget::UpdateCurrentDamageText() {
+	if (this->CurrentDamage) {
+		this->CurrentDamage->SetText(FText::AsNumber(this->Character->NormalDamage * 100));
+	}
+}
+
+void UShopMenuWidget::UpdateWhirlwindDamageText() {
+	if (this->CurrentWhirlwindDamage) {
+		this->CurrentWhirlwindDamage->SetText(FText::AsNumber(this->Character->WhirlwindDamage * 100));
+	}
+}
+
+void UShopMenuWidget::UpdateHelicopterDamageText() {
+	if (this->CurrentHelicopterDamage) {
+		this->CurrentHelicopterDamage->SetText(FText::AsNumber(this->Character->HelicopterDamage * 100));
+	}
+}
+
+void UShopMenuWidget::UpdateLeapDamageText() {
+	if (this->CurrentLeapDamage) {
+		this->CurrentLeapDamage->SetText(FText::AsNumber(this->Character->LeapDamage * 100));
+	}
+}
+
+void UShopMenuWidget::UpdateHealthCost() {
+	if (this->HealthUpgradeCost) {
+		this->HealthUpgradeCost->SetText(FText::AsNumber(this->GameMode->HealthUpgradeCost, &this->FormatingOptions2Ints));
+	}
+}
+
+void UShopMenuWidget::UpdateStaminaCost() {
+	if (this->StaminaUpgradeCost) {
+		this->StaminaUpgradeCost->SetText(FText::AsNumber(this->GameMode->StaminaUpgradeCost, &this->FormatingOptions2Ints));
+	}
+}
+
+void UShopMenuWidget::UpdateSpeedCost() {
+	if (this->SpeedUpgradeCost) {
+		this->SpeedUpgradeCost->SetText(FText::AsNumber(this->GameMode->SpeedUpgradeCost, &this->FormatingOptions2Ints));
+	}
+}
+
+void UShopMenuWidget::UpdateDamageCost() {
+	if (this->DamageUpgradeCost) {
+		this->DamageUpgradeCost->SetText(FText::AsNumber(this->GameMode->DamageUpgradeCost, &this->FormatingOptions2Ints));
+	}
+}
+
+void UShopMenuWidget::UpdateWhirlwindCost() {
+	if (this->WhirlwindUpgradeCost) {
+		this->WhirlwindUpgradeCost->SetText(FText::AsNumber(this->GameMode->WhirlwindUpgradeCost, &this->FormatingOptions2Ints));
+	}
+}
+
+void UShopMenuWidget::UpdateHelicopterCost() {
+	if (this->HelicopterUpgradeCost) {
+		this->HelicopterUpgradeCost->SetText(FText::AsNumber(this->GameMode->HelicopterUpgradeCost, &this->FormatingOptions2Ints));
+	}
+}
+
+void UShopMenuWidget::UpdateLeapCost() {
+	if (this->LeapUpgradeCost) {
+		this->LeapUpgradeCost->SetText(FText::AsNumber(this->GameMode->LeapUpgradeCost, &this->FormatingOptions2Ints));
 	}
 }
